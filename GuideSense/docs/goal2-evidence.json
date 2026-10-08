@@ -1,0 +1,313 @@
+{
+  "verified_date": "2026-10-08",
+  "public_dataset": {
+    "rows": 10611068,
+    "columns": [
+      "DogID",
+      "TestNum",
+      "t_sec",
+      "ABack_x",
+      "ABack_y",
+      "ABack_z",
+      "ANeck_x",
+      "ANeck_y",
+      "ANeck_z",
+      "GBack_x",
+      "GBack_y",
+      "GBack_z",
+      "GNeck_x",
+      "GNeck_y",
+      "GNeck_z",
+      "Task",
+      "Behavior_1",
+      "Behavior_2",
+      "Behavior_3",
+      "PointEvent"
+    ],
+    "dog_count": 45,
+    "session_count": 62,
+    "source_sha256": "f5028606724b9a043f0ab098b6f622aceb58ba5f21722ddaccff0600ab2be060"
+  },
+  "capture": {
+    "schema_version": 1,
+    "session_id": "REDACTED_PAIRED_CAPTURE",
+    "source": "iphone_imu",
+    "context": "human_held_phone",
+    "start_timestamp": 1791430930155,
+    "end_timestamp": 1791430950323,
+    "timestamp_unit": "unix_ms_js_callback",
+    "sample_count": 1002,
+    "sensors": {
+      "accelerometer": {
+        "count": 1002,
+        "first": 1791430930148,
+        "last": 1791430950281,
+        "non_increasing": 0,
+        "observed_sampling_rate": 49.719366214672434
+      },
+      "gyroscope": {
+        "count": 1002,
+        "first": 1791430930163,
+        "last": 1791430950296,
+        "non_increasing": 0,
+        "observed_sampling_rate": 49.719366214672434
+      }
+    },
+    "units": {
+      "acceleration": "g",
+      "gyroscope": "rad/s"
+    },
+    "status": "complete",
+    "dropped_frames": 0,
+    "error": null,
+    "gps_stored": false
+  },
+  "public_window": {
+    "status": "VALID",
+    "reasons": [],
+    "start": 105.39,
+    "end": 108.39,
+    "duration": 3.0,
+    "observed_duration": 2.980000000000004,
+    "sample_count": 150,
+    "nominal_sample_count": 150,
+    "effective_sampling_rate": 49.999999999999936,
+    "gap_count": 0,
+    "max_gap": 0.020000000000010232,
+    "estimated_missing_samples": 0,
+    "sensor_timing": {}
+  },
+  "iphone_window": {
+    "status": "VALID",
+    "reasons": [],
+    "start": 0.0,
+    "end": 3.0,
+    "duration": 3.0,
+    "observed_duration": 2.996,
+    "sample_count": 150,
+    "nominal_sample_count": 150,
+    "effective_sampling_rate": 49.73297730307076,
+    "gap_count": 0,
+    "max_gap": 0.028999999999999915,
+    "estimated_missing_samples": 0,
+    "sensor_timing": {
+      "accelerometer": {
+        "effective_sampling_rate": 49.73297730307076,
+        "non_increasing": 0,
+        "gap_count": 0
+      },
+      "gyroscope": {
+        "effective_sampling_rate": 49.73297730307076,
+        "non_increasing": 0,
+        "gap_count": 0
+      }
+    }
+  },
+  "iphone_all_windows": [
+    {
+      "status": "VALID",
+      "reasons": [],
+      "start": 0.0,
+      "end": 3.0,
+      "duration": 3.0,
+      "observed_duration": 2.996,
+      "sample_count": 150,
+      "nominal_sample_count": 150,
+      "effective_sampling_rate": 49.73297730307076,
+      "gap_count": 0,
+      "max_gap": 0.028999999999999915,
+      "estimated_missing_samples": 0,
+      "sensor_timing": {
+        "accelerometer": {
+          "effective_sampling_rate": 49.73297730307076,
+          "non_increasing": 0,
+          "gap_count": 0
+        },
+        "gyroscope": {
+          "effective_sampling_rate": 49.73297730307076,
+          "non_increasing": 0,
+          "gap_count": 0
+        }
+      }
+    },
+    {
+      "status": "VALID",
+      "reasons": [],
+      "start": 3.0,
+      "end": 6.0,
+      "duration": 3.0,
+      "observed_duration": 2.9760000000000004,
+      "sample_count": 149,
+      "nominal_sample_count": 150,
+      "effective_sampling_rate": 49.73118279569892,
+      "gap_count": 0,
+      "max_gap": 0.028000000000000025,
+      "estimated_missing_samples": 0,
+      "sensor_timing": {
+        "accelerometer": {
+          "effective_sampling_rate": 49.73118279569893,
+          "non_increasing": 0,
+          "gap_count": 0
+        },
+        "gyroscope": {
+          "effective_sampling_rate": 49.73118279569892,
+          "non_increasing": 0,
+          "gap_count": 0
+        }
+      }
+    },
+    {
+      "status": "VALID",
+      "reasons": [],
+      "start": 6.0,
+      "end": 9.0,
+      "duration": 3.0,
+      "observed_duration": 2.9800000000000004,
+      "sample_count": 149,
+      "nominal_sample_count": 150,
+      "effective_sampling_rate": 49.66442953020133,
+      "gap_count": 0,
+      "max_gap": 0.028999999999999915,
+      "estimated_missing_samples": 0,
+      "sensor_timing": {
+        "accelerometer": {
+          "effective_sampling_rate": 49.73118279569893,
+          "non_increasing": 0,
+          "gap_count": 0
+        },
+        "gyroscope": {
+          "effective_sampling_rate": 49.66442953020133,
+          "non_increasing": 0,
+          "gap_count": 0
+        }
+      }
+    },
+    {
+      "status": "INVALID_WINDOW",
+      "reasons": [
+        "GAP_DETECTED",
+        "INVALID_ACCELEROMETER_TIMING",
+        "INVALID_GYROSCOPE_TIMING"
+      ],
+      "start": 9.0,
+      "end": 12.0,
+      "duration": 3.0,
+      "observed_duration": 2.9770000000000003,
+      "sample_count": 149,
+      "nominal_sample_count": 150,
+      "effective_sampling_rate": 49.71447766207591,
+      "gap_count": 1,
+      "max_gap": 0.057000000000000384,
+      "estimated_missing_samples": 2,
+      "sensor_timing": {
+        "accelerometer": {
+          "effective_sampling_rate": 49.71447766207591,
+          "non_increasing": 0,
+          "gap_count": 1
+        },
+        "gyroscope": {
+          "effective_sampling_rate": 49.71447766207591,
+          "non_increasing": 0,
+          "gap_count": 1
+        }
+      }
+    },
+    {
+      "status": "VALID",
+      "reasons": [],
+      "start": 12.0,
+      "end": 15.0,
+      "duration": 3.0,
+      "observed_duration": 2.976000000000001,
+      "sample_count": 149,
+      "nominal_sample_count": 150,
+      "effective_sampling_rate": 49.73118279569891,
+      "gap_count": 0,
+      "max_gap": 0.02999999999999936,
+      "estimated_missing_samples": 0,
+      "sensor_timing": {
+        "accelerometer": {
+          "effective_sampling_rate": 49.71447766207594,
+          "non_increasing": 0,
+          "gap_count": 0
+        },
+        "gyroscope": {
+          "effective_sampling_rate": 49.73118279569891,
+          "non_increasing": 0,
+          "gap_count": 0
+        }
+      }
+    },
+    {
+      "status": "VALID",
+      "reasons": [],
+      "start": 15.0,
+      "end": 18.0,
+      "duration": 3.0,
+      "observed_duration": 2.977000000000002,
+      "sample_count": 149,
+      "nominal_sample_count": 150,
+      "effective_sampling_rate": 49.71447766207588,
+      "gap_count": 0,
+      "max_gap": 0.02999999999999936,
+      "estimated_missing_samples": 0,
+      "sensor_timing": {
+        "accelerometer": {
+          "effective_sampling_rate": 49.71447766207591,
+          "non_increasing": 0,
+          "gap_count": 0
+        },
+        "gyroscope": {
+          "effective_sampling_rate": 49.71447766207588,
+          "non_increasing": 0,
+          "gap_count": 0
+        }
+      }
+    },
+    {
+      "status": "INVALID_WINDOW",
+      "reasons": ["INSUFFICIENT_SAMPLES", "INCOMPLETE_COVERAGE"],
+      "start": 18.0,
+      "end": 21.0,
+      "duration": 3.0,
+      "observed_duration": 2.131999999999998,
+      "sample_count": 107,
+      "nominal_sample_count": 150,
+      "effective_sampling_rate": 49.71857410881806,
+      "gap_count": 0,
+      "max_gap": 0.02699999999999747,
+      "estimated_missing_samples": 0,
+      "sensor_timing": {
+        "accelerometer": {
+          "effective_sampling_rate": 49.71857410881806,
+          "non_increasing": 0,
+          "gap_count": 0
+        },
+        "gyroscope": {
+          "effective_sampling_rate": 49.71857410881806,
+          "non_increasing": 0,
+          "gap_count": 0
+        }
+      }
+    }
+  ],
+  "feature_schema_version": "guidesense-imu-statistics-v1",
+  "feature_count": 112,
+  "same_feature_names_and_order": true,
+  "public_and_iphone_vectors_generated": true,
+  "physical_values_comparable": false,
+  "real_browser_regression": {
+    "source": "Browser at localhost:5173, real API port 8000; no synthetic frames",
+    "connectedSeen": true,
+    "gpsDisplayed": true,
+    "accuracyDisplayed": true,
+    "motionDisplayChanges": {
+      "accelerometer": 220,
+      "gyroscope": 240
+    },
+    "disconnectedAfterConnected": true,
+    "valuesClearedAfterDisconnect": true,
+    "errors": []
+  },
+  "raw_capture_privacy_allowlist_verified": true
+}

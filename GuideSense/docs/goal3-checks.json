@@ -1,0 +1,93 @@
+{
+  "validated_at_utc": "2026-10-08T04:13:54.400210+00:00",
+  "real_data_integration": true,
+  "new_physical_iphone_test": false,
+  "checks": {
+    "pytest": {
+      "command": [
+        "services/api/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "services/api/tests",
+        "ml/gait/tests"
+      ],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:50.957790+00:00",
+      "log": "artifacts/goal3/validation/pytest.log"
+    },
+    "ruff_lint": {
+      "command": [
+        "services/api/.venv/bin/ruff",
+        "check",
+        "services/api",
+        "ml/gait",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:50.959378+00:00",
+      "log": "artifacts/goal3/validation/ruff_lint.log"
+    },
+    "ruff_format": {
+      "command": [
+        "services/api/.venv/bin/ruff",
+        "format",
+        "--check",
+        "services/api",
+        "ml/gait",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:50.959627+00:00",
+      "log": "artifacts/goal3/validation/ruff_format.log"
+    },
+    "prettier": {
+      "command": ["npm", "run", "format:check"],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:50.961543+00:00",
+      "log": "artifacts/goal3/validation/prettier.log"
+    },
+    "typecheck": {
+      "command": ["npm", "run", "typecheck"],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:50.969047+00:00",
+      "log": "artifacts/goal3/validation/typecheck.log"
+    },
+    "vitest": {
+      "command": ["npm", "test"],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:50.970239+00:00",
+      "log": "artifacts/goal3/validation/vitest.log"
+    },
+    "dashboard_build": {
+      "command": ["npm", "run", "build"],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:51.582773+00:00",
+      "log": "artifacts/goal3/validation/dashboard_build.log"
+    },
+    "pip_check": {
+      "command": ["services/api/.venv/bin/python", "-m", "pip", "check"],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:51.880702+00:00",
+      "log": "artifacts/goal3/validation/pip_check.log"
+    },
+    "replay_check": {
+      "command": [
+        "services/api/.venv/bin/python",
+        "-m",
+        "guidesense_gait.activity",
+        "check-replay"
+      ],
+      "exit_code": 0,
+      "started_at_utc": "2026-10-08T04:13:52.145818+00:00",
+      "log": "artifacts/goal3/validation/replay_check.log"
+    },
+    "playwright": {
+      "command": ["npm", "run", "test:e2e"],
+      "exit_code": 0,
+      "tests_passed": 3,
+      "log": "artifacts/goal3/validation/playwright.log",
+      "evidence": "Earlier completed run in this same Goal; apps and API unchanged afterward"
+    }
+  }
+}

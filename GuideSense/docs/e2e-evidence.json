@@ -1,0 +1,49 @@
+{
+  "validatedDate": "2026-10-08 Asia/Seoul",
+  "hardware": "User-specified iPhone 16 Pro / iOS 27, Expo Go SDK 57; model/OS not programmatically queried",
+  "realDeviceApiPort": 8000,
+  "syntheticTestsApiPort": 8001,
+  "userConfirmedStop": true,
+  "rate": {
+    "source": "Actual iPhone, port 8000; no synthetic frames",
+    "measuredAt": 1791386892977,
+    "seconds": 10.027,
+    "connectedThroughout": true,
+    "uniqueFrames": 492,
+    "framesPerSecond": 49.07,
+    "uniqueSampleTimestamps": {
+      "accelerometer": 492,
+      "gyroscope": 492
+    },
+    "sensorStatus": {
+      "accelerometer": "ready",
+      "gyroscope": "ready",
+      "location": "ready"
+    },
+    "gpsReceived": true,
+    "gpsAccuracyPresent": true,
+    "firstReceivedAt": 1791386882946,
+    "lastReceivedAt": 1791386892975
+  },
+  "browser": {
+    "source": "Live browser localhost:5173, API 8000; no synthetic input",
+    "observedAt": 1791386912407,
+    "connected": true,
+    "accelerometerChanged": true,
+    "gyroscopeChanged": true,
+    "gpsLatitudeDisplayed": true,
+    "gpsLongitudeDisplayed": true,
+    "gpsAccuracyDisplayed": true
+  },
+  "stop": {
+    "source": "Actual device after user confirmed Stop Streaming",
+    "observedAt": 1791386968033,
+    "disconnected": true,
+    "serverStillConnected": true,
+    "valuesCleared": true,
+    "lastReceivedTimePreserved": true,
+    "lastFrameToDisconnectedMs": 3214
+  },
+  "apiAcceptedFrames": 7878,
+  "gpsCoordinatesStored": false
+}

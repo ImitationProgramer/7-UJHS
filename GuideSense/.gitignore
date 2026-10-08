@@ -1,0 +1,20 @@
+node_modules/
+.venv/
+.expo/
+dist/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+.env
+.env.local
+test-results/
+playwright-report/
+artifacts/
+.DS_Store
+# Public raw data and private IMU recordings (never commit)
+data/external/*
+!data/external/README.md
+data/captures/*
+!data/captures/README.md
+*.egg-info/

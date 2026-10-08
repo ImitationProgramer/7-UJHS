@@ -1,0 +1,1598 @@
+{
+  "model": {
+    "dataset_version": "mendeley-vxhx934tbn-v4",
+    "dataset_source": "https://data.mendeley.com/datasets/vxhx934tbn/4",
+    "source_sha256": "f5028606724b9a043f0ab098b6f622aceb58ba5f21722ddaccff0600ab2be060",
+    "feature_schema_version": "guidesense-imu-statistics-v1",
+    "feature_order": [
+      "accel_x__mean",
+      "accel_x__std",
+      "accel_x__variance",
+      "accel_x__min",
+      "accel_x__max",
+      "accel_x__range",
+      "accel_x__rms",
+      "accel_x__median",
+      "accel_x__p05",
+      "accel_x__p25",
+      "accel_x__p75",
+      "accel_x__p95",
+      "accel_x__energy",
+      "accel_x__mean_square",
+      "accel_y__mean",
+      "accel_y__std",
+      "accel_y__variance",
+      "accel_y__min",
+      "accel_y__max",
+      "accel_y__range",
+      "accel_y__rms",
+      "accel_y__median",
+      "accel_y__p05",
+      "accel_y__p25",
+      "accel_y__p75",
+      "accel_y__p95",
+      "accel_y__energy",
+      "accel_y__mean_square",
+      "accel_z__mean",
+      "accel_z__std",
+      "accel_z__variance",
+      "accel_z__min",
+      "accel_z__max",
+      "accel_z__range",
+      "accel_z__rms",
+      "accel_z__median",
+      "accel_z__p05",
+      "accel_z__p25",
+      "accel_z__p75",
+      "accel_z__p95",
+      "accel_z__energy",
+      "accel_z__mean_square",
+      "gyro_x__mean",
+      "gyro_x__std",
+      "gyro_x__variance",
+      "gyro_x__min",
+      "gyro_x__max",
+      "gyro_x__range",
+      "gyro_x__rms",
+      "gyro_x__median",
+      "gyro_x__p05",
+      "gyro_x__p25",
+      "gyro_x__p75",
+      "gyro_x__p95",
+      "gyro_x__energy",
+      "gyro_x__mean_square",
+      "gyro_y__mean",
+      "gyro_y__std",
+      "gyro_y__variance",
+      "gyro_y__min",
+      "gyro_y__max",
+      "gyro_y__range",
+      "gyro_y__rms",
+      "gyro_y__median",
+      "gyro_y__p05",
+      "gyro_y__p25",
+      "gyro_y__p75",
+      "gyro_y__p95",
+      "gyro_y__energy",
+      "gyro_y__mean_square",
+      "gyro_z__mean",
+      "gyro_z__std",
+      "gyro_z__variance",
+      "gyro_z__min",
+      "gyro_z__max",
+      "gyro_z__range",
+      "gyro_z__rms",
+      "gyro_z__median",
+      "gyro_z__p05",
+      "gyro_z__p25",
+      "gyro_z__p75",
+      "gyro_z__p95",
+      "gyro_z__energy",
+      "gyro_z__mean_square",
+      "accel_magnitude__mean",
+      "accel_magnitude__std",
+      "accel_magnitude__variance",
+      "accel_magnitude__min",
+      "accel_magnitude__max",
+      "accel_magnitude__range",
+      "accel_magnitude__rms",
+      "accel_magnitude__median",
+      "accel_magnitude__p05",
+      "accel_magnitude__p25",
+      "accel_magnitude__p75",
+      "accel_magnitude__p95",
+      "accel_magnitude__energy",
+      "accel_magnitude__mean_square",
+      "gyro_magnitude__mean",
+      "gyro_magnitude__std",
+      "gyro_magnitude__variance",
+      "gyro_magnitude__min",
+      "gyro_magnitude__max",
+      "gyro_magnitude__range",
+      "gyro_magnitude__rms",
+      "gyro_magnitude__median",
+      "gyro_magnitude__p05",
+      "gyro_magnitude__p25",
+      "gyro_magnitude__p75",
+      "gyro_magnitude__p95",
+      "gyro_magnitude__energy",
+      "gyro_magnitude__mean_square"
+    ],
+    "preprocessing_version": "goal3-back50hz-strict3s-v1",
+    "sampling_rate": 50,
+    "window_duration": 3,
+    "stride_seconds": 3,
+    "units": {
+      "acceleration": "UNKNOWN",
+      "gyroscope": "UNKNOWN"
+    },
+    "unit_space": "mendeley-vxhx934tbn-v4-native-unverified",
+    "seed": 20261008,
+    "split": {
+      "train": [
+        16, 18, 19, 20, 21, 23, 25, 27, 29, 30, 34, 41, 43, 46, 49, 51, 52, 53,
+        54, 55, 56, 57, 58, 59, 61, 66, 67, 68, 72, 73, 74
+      ],
+      "validation": [28, 33, 36, 39, 48, 65, 70],
+      "test": [22, 26, 44, 45, 47, 60, 63]
+    },
+    "classes": [
+      "Walking",
+      "Trotting",
+      "Sitting",
+      "Lying chest",
+      "Sniffing",
+      "Playing"
+    ],
+    "class_decisions": {
+      "Walking": {
+        "selected": true,
+        "by_split": {
+          "train": {
+            "windows": 857,
+            "dogs": 29,
+            "sessions": 41
+          },
+          "validation": {
+            "windows": 218,
+            "dogs": 7,
+            "sessions": 9
+          },
+          "test": {
+            "windows": 240,
+            "dogs": 7,
+            "sessions": 10
+          }
+        }
+      },
+      "Trotting": {
+        "selected": true,
+        "by_split": {
+          "train": {
+            "windows": 1081,
+            "dogs": 29,
+            "sessions": 40
+          },
+          "validation": {
+            "windows": 141,
+            "dogs": 6,
+            "sessions": 8
+          },
+          "test": {
+            "windows": 294,
+            "dogs": 7,
+            "sessions": 10
+          }
+        }
+      },
+      "Standing": {
+        "selected": false,
+        "by_split": {
+          "train": {
+            "windows": 460,
+            "dogs": 20,
+            "sessions": 27
+          },
+          "validation": {
+            "windows": 14,
+            "dogs": 2,
+            "sessions": 2
+          },
+          "test": {
+            "windows": 93,
+            "dogs": 4,
+            "sessions": 4
+          }
+        }
+      },
+      "Sitting": {
+        "selected": true,
+        "by_split": {
+          "train": {
+            "windows": 590,
+            "dogs": 22,
+            "sessions": 29
+          },
+          "validation": {
+            "windows": 36,
+            "dogs": 4,
+            "sessions": 5
+          },
+          "test": {
+            "windows": 143,
+            "dogs": 5,
+            "sessions": 7
+          }
+        }
+      },
+      "Lying chest": {
+        "selected": true,
+        "by_split": {
+          "train": {
+            "windows": 748,
+            "dogs": 23,
+            "sessions": 33
+          },
+          "validation": {
+            "windows": 100,
+            "dogs": 5,
+            "sessions": 6
+          },
+          "test": {
+            "windows": 161,
+            "dogs": 6,
+            "sessions": 7
+          }
+        }
+      },
+      "Sniffing": {
+        "selected": true,
+        "by_split": {
+          "train": {
+            "windows": 1787,
+            "dogs": 31,
+            "sessions": 43
+          },
+          "validation": {
+            "windows": 368,
+            "dogs": 7,
+            "sessions": 9
+          },
+          "test": {
+            "windows": 394,
+            "dogs": 7,
+            "sessions": 10
+          }
+        }
+      },
+      "Playing": {
+        "selected": true,
+        "by_split": {
+          "train": {
+            "windows": 143,
+            "dogs": 25,
+            "sessions": 32
+          },
+          "validation": {
+            "windows": 27,
+            "dogs": 6,
+            "sessions": 7
+          },
+          "test": {
+            "windows": 33,
+            "dogs": 4,
+            "sessions": 5
+          }
+        }
+      }
+    },
+    "class_policy": "candidate, >=100 windows/10 dogs overall; >=20 windows/2 dogs each split; 100% singleton + 0.2s FIR guard",
+    "features_sha256": "730a5fa912bc0c7830293ffe27f43e673f25e79c0ab0a8c740eea52934f3703f",
+    "split_distribution": {
+      "train": {
+        "Walking": {
+          "windows": 857,
+          "dogs": 29,
+          "sessions": 41
+        },
+        "Trotting": {
+          "windows": 1081,
+          "dogs": 29,
+          "sessions": 40
+        },
+        "Sitting": {
+          "windows": 590,
+          "dogs": 22,
+          "sessions": 29
+        },
+        "Lying chest": {
+          "windows": 748,
+          "dogs": 23,
+          "sessions": 33
+        },
+        "Sniffing": {
+          "windows": 1787,
+          "dogs": 31,
+          "sessions": 43
+        },
+        "Playing": {
+          "windows": 143,
+          "dogs": 25,
+          "sessions": 32
+        }
+      },
+      "validation": {
+        "Walking": {
+          "windows": 218,
+          "dogs": 7,
+          "sessions": 9
+        },
+        "Trotting": {
+          "windows": 141,
+          "dogs": 6,
+          "sessions": 8
+        },
+        "Sitting": {
+          "windows": 36,
+          "dogs": 4,
+          "sessions": 5
+        },
+        "Lying chest": {
+          "windows": 100,
+          "dogs": 5,
+          "sessions": 6
+        },
+        "Sniffing": {
+          "windows": 368,
+          "dogs": 7,
+          "sessions": 9
+        },
+        "Playing": {
+          "windows": 27,
+          "dogs": 6,
+          "sessions": 7
+        }
+      },
+      "test": {
+        "Walking": {
+          "windows": 240,
+          "dogs": 7,
+          "sessions": 10
+        },
+        "Trotting": {
+          "windows": 294,
+          "dogs": 7,
+          "sessions": 10
+        },
+        "Sitting": {
+          "windows": 143,
+          "dogs": 5,
+          "sessions": 7
+        },
+        "Lying chest": {
+          "windows": 161,
+          "dogs": 6,
+          "sessions": 7
+        },
+        "Sniffing": {
+          "windows": 394,
+          "dogs": 7,
+          "sessions": 10
+        },
+        "Playing": {
+          "windows": 33,
+          "dogs": 4,
+          "sessions": 5
+        }
+      }
+    },
+    "windows": 7361,
+    "all_clear_windows": 8135,
+    "model_version": "goal3-v1",
+    "sensor_position": "back",
+    "model_type": "RandomForestClassifier",
+    "selected_candidate": "rf_unweighted",
+    "selection_metric": "validation macro_f1; insertion order resolves ties",
+    "hyperparameters": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": "sqrt",
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 2,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 300,
+      "n_jobs": 4,
+      "oob_score": false,
+      "random_state": 20261008,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "training_windows": 5206,
+    "scaling": "none; tree and dummy require no scaler",
+    "refit_on_validation": false,
+    "evaluation_metrics": {
+      "validation": {
+        "dummy_most_frequent": {
+          "accuracy": 0.4134831460674157,
+          "macro_f1": 0.09750927397986221,
+          "weighted_f1": 0.24191064825565817,
+          "class_report": {
+            "Walking": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 218.0
+            },
+            "Trotting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 141.0
+            },
+            "Sitting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 36.0
+            },
+            "Lying chest": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 100.0
+            },
+            "Sniffing": {
+              "precision": 0.4134831460674157,
+              "recall": 1.0,
+              "f1-score": 0.5850556438791733,
+              "support": 368.0
+            },
+            "Playing": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 27.0
+            },
+            "accuracy": 0.4134831460674157,
+            "macro avg": {
+              "precision": 0.06891385767790262,
+              "recall": 0.16666666666666666,
+              "f1-score": 0.09750927397986221,
+              "support": 890.0
+            },
+            "weighted avg": {
+              "precision": 0.17096831208180785,
+              "recall": 0.4134831460674157,
+              "f1-score": 0.24191064825565817,
+              "support": 890.0
+            }
+          },
+          "confusion_matrix": [
+            [0, 0, 0, 0, 218, 0],
+            [0, 0, 0, 0, 141, 0],
+            [0, 0, 0, 0, 36, 0],
+            [0, 0, 0, 0, 100, 0],
+            [0, 0, 0, 0, 368, 0],
+            [0, 0, 0, 0, 27, 0]
+          ],
+          "confusion_order": [
+            "Walking",
+            "Trotting",
+            "Sitting",
+            "Lying chest",
+            "Sniffing",
+            "Playing"
+          ],
+          "windows": 890,
+          "dogs": 7,
+          "per_dog": {
+            "28": {
+              "windows": 63,
+              "accuracy": 0.49206349206349204,
+              "macro_f1_present_classes": 0.16489361702127658
+            },
+            "33": {
+              "windows": 136,
+              "accuracy": 0.3897058823529412,
+              "macro_f1_present_classes": 0.1402116402116402
+            },
+            "36": {
+              "windows": 75,
+              "accuracy": 0.24,
+              "macro_f1_present_classes": 0.07741935483870968
+            },
+            "39": {
+              "windows": 228,
+              "accuracy": 0.38596491228070173,
+              "macro_f1_present_classes": 0.09282700421940927
+            },
+            "48": {
+              "windows": 198,
+              "accuracy": 0.45454545454545453,
+              "macro_f1_present_classes": 0.10416666666666667
+            },
+            "65": {
+              "windows": 66,
+              "accuracy": 0.4393939393939394,
+              "macro_f1_present_classes": 0.12210526315789474
+            },
+            "70": {
+              "windows": 124,
+              "accuracy": 0.47580645161290325,
+              "macro_f1_present_classes": 0.1289617486338798
+            }
+          }
+        },
+        "rf_unweighted": {
+          "accuracy": 0.9629213483146067,
+          "macro_f1": 0.9097041973670393,
+          "weighted_f1": 0.9645161626408254,
+          "class_report": {
+            "Walking": {
+              "precision": 0.9952830188679245,
+              "recall": 0.9678899082568807,
+              "f1-score": 0.9813953488372092,
+              "support": 218.0
+            },
+            "Trotting": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1-score": 1.0,
+              "support": 141.0
+            },
+            "Sitting": {
+              "precision": 0.6181818181818182,
+              "recall": 0.9444444444444444,
+              "f1-score": 0.7472527472527473,
+              "support": 36.0
+            },
+            "Lying chest": {
+              "precision": 0.9753086419753086,
+              "recall": 0.79,
+              "f1-score": 0.8729281767955801,
+              "support": 100.0
+            },
+            "Sniffing": {
+              "precision": 0.9918918918918919,
+              "recall": 0.9972826086956522,
+              "f1-score": 0.994579945799458,
+              "support": 368.0
+            },
+            "Playing": {
+              "precision": 0.8064516129032258,
+              "recall": 0.9259259259259259,
+              "f1-score": 0.8620689655172413,
+              "support": 27.0
+            },
+            "accuracy": 0.9629213483146067,
+            "macro avg": {
+              "precision": 0.8978528306366949,
+              "recall": 0.9375904812204839,
+              "f1-score": 0.9097041973670393,
+              "support": 890.0
+            },
+            "weighted avg": {
+              "precision": 0.9714017050897609,
+              "recall": 0.9629213483146067,
+              "f1-score": 0.9645161626408254,
+              "support": 890.0
+            }
+          },
+          "confusion_matrix": [
+            [211, 0, 0, 0, 2, 5],
+            [0, 141, 0, 0, 0, 0],
+            [0, 0, 34, 2, 0, 0],
+            [0, 0, 21, 79, 0, 0],
+            [0, 0, 0, 0, 367, 1],
+            [1, 0, 0, 0, 1, 25]
+          ],
+          "confusion_order": [
+            "Walking",
+            "Trotting",
+            "Sitting",
+            "Lying chest",
+            "Sniffing",
+            "Playing"
+          ],
+          "windows": 890,
+          "dogs": 7,
+          "per_dog": {
+            "28": {
+              "windows": 63,
+              "accuracy": 1.0,
+              "macro_f1_present_classes": 1.0
+            },
+            "33": {
+              "windows": 136,
+              "accuracy": 0.9485294117647058,
+              "macro_f1_present_classes": 0.7994722091256745
+            },
+            "36": {
+              "windows": 75,
+              "accuracy": 0.8,
+              "macro_f1_present_classes": 0.9565217391304348
+            },
+            "39": {
+              "windows": 228,
+              "accuracy": 0.9868421052631579,
+              "macro_f1_present_classes": 0.9723076923076923
+            },
+            "48": {
+              "windows": 198,
+              "accuracy": 1.0,
+              "macro_f1_present_classes": 1.0
+            },
+            "65": {
+              "windows": 66,
+              "accuracy": 0.9242424242424242,
+              "macro_f1_present_classes": 0.8003919372900337
+            },
+            "70": {
+              "windows": 124,
+              "accuracy": 0.9758064516129032,
+              "macro_f1_present_classes": 0.8760971055088703
+            }
+          }
+        },
+        "rf_balanced": {
+          "accuracy": 0.9606741573033708,
+          "macro_f1": 0.9065006427105997,
+          "weighted_f1": 0.9624359119068554,
+          "class_report": {
+            "Walking": {
+              "precision": 1.0,
+              "recall": 0.963302752293578,
+              "f1-score": 0.9813084112149533,
+              "support": 218.0
+            },
+            "Trotting": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1-score": 1.0,
+              "support": 141.0
+            },
+            "Sitting": {
+              "precision": 0.6296296296296297,
+              "recall": 0.9444444444444444,
+              "f1-score": 0.7555555555555555,
+              "support": 36.0
+            },
+            "Lying chest": {
+              "precision": 0.9753086419753086,
+              "recall": 0.79,
+              "f1-score": 0.8729281767955801,
+              "support": 100.0
+            },
+            "Sniffing": {
+              "precision": 0.989159891598916,
+              "recall": 0.9918478260869565,
+              "f1-score": 0.9905020352781547,
+              "support": 368.0
+            },
+            "Playing": {
+              "precision": 0.7428571428571429,
+              "recall": 0.9629629629629629,
+              "f1-score": 0.8387096774193549,
+              "support": 27.0
+            },
+            "accuracy": 0.9606741573033708,
+            "macro avg": {
+              "precision": 0.8894925510101662,
+              "recall": 0.9420929976313236,
+              "f1-score": 0.9065006427105997,
+              "support": 890.0
+            },
+            "weighted avg": {
+              "precision": 0.9699612514940916,
+              "recall": 0.9606741573033708,
+              "f1-score": 0.9624359119068554,
+              "support": 890.0
+            }
+          },
+          "confusion_matrix": [
+            [210, 0, 0, 0, 3, 5],
+            [0, 141, 0, 0, 0, 0],
+            [0, 0, 34, 2, 0, 0],
+            [0, 0, 20, 79, 0, 1],
+            [0, 0, 0, 0, 365, 3],
+            [0, 0, 0, 0, 1, 26]
+          ],
+          "confusion_order": [
+            "Walking",
+            "Trotting",
+            "Sitting",
+            "Lying chest",
+            "Sniffing",
+            "Playing"
+          ],
+          "windows": 890,
+          "dogs": 7,
+          "per_dog": {
+            "28": {
+              "windows": 63,
+              "accuracy": 0.9841269841269841,
+              "macro_f1_present_classes": 0.9772727272727273
+            },
+            "33": {
+              "windows": 136,
+              "accuracy": 0.9411764705882353,
+              "macro_f1_present_classes": 0.7945478374836172
+            },
+            "36": {
+              "windows": 75,
+              "accuracy": 0.8,
+              "macro_f1_present_classes": 0.9565217391304348
+            },
+            "39": {
+              "windows": 228,
+              "accuracy": 0.9912280701754386,
+              "macro_f1_present_classes": 0.9819711538461539
+            },
+            "48": {
+              "windows": 198,
+              "accuracy": 0.98989898989899,
+              "macro_f1_present_classes": 0.9796088223054515
+            },
+            "65": {
+              "windows": 66,
+              "accuracy": 0.9393939393939394,
+              "macro_f1_present_classes": 0.8415030484011445
+            },
+            "70": {
+              "windows": 124,
+              "accuracy": 0.9758064516129032,
+              "macro_f1_present_classes": 0.8760971055088703
+            }
+          }
+        }
+      },
+      "test": {
+        "selected": {
+          "accuracy": 0.908300395256917,
+          "macro_f1": 0.8856081919092703,
+          "weighted_f1": 0.907902275598955,
+          "class_report": {
+            "Walking": {
+              "precision": 0.9214876033057852,
+              "recall": 0.9291666666666667,
+              "f1-score": 0.9253112033195021,
+              "support": 240.0
+            },
+            "Trotting": {
+              "precision": 0.9965753424657534,
+              "recall": 0.9897959183673469,
+              "f1-score": 0.9931740614334471,
+              "support": 294.0
+            },
+            "Sitting": {
+              "precision": 0.6931818181818182,
+              "recall": 0.8531468531468531,
+              "f1-score": 0.7648902821316614,
+              "support": 143.0
+            },
+            "Lying chest": {
+              "precision": 0.8346456692913385,
+              "recall": 0.6583850931677019,
+              "f1-score": 0.7361111111111112,
+              "support": 161.0
+            },
+            "Sniffing": {
+              "precision": 0.9541984732824428,
+              "recall": 0.9517766497461929,
+              "f1-score": 0.9529860228716646,
+              "support": 394.0
+            },
+            "Playing": {
+              "precision": 0.9142857142857143,
+              "recall": 0.9696969696969697,
+              "f1-score": 0.9411764705882353,
+              "support": 33.0
+            },
+            "accuracy": 0.908300395256917,
+            "macro avg": {
+              "precision": 0.8857291034688087,
+              "recall": 0.8919946917986219,
+              "f1-score": 0.8856081919092703,
+              "support": 1265.0
+            },
+            "weighted avg": {
+              "precision": 0.9120780674141792,
+              "recall": 0.908300395256917,
+              "f1-score": 0.907902275598955,
+              "support": 1265.0
+            }
+          },
+          "confusion_matrix": [
+            [223, 0, 0, 0, 17, 0],
+            [0, 291, 0, 0, 0, 3],
+            [1, 0, 122, 20, 0, 0],
+            [0, 0, 54, 106, 1, 0],
+            [18, 0, 0, 1, 375, 0],
+            [0, 1, 0, 0, 0, 32]
+          ],
+          "confusion_order": [
+            "Walking",
+            "Trotting",
+            "Sitting",
+            "Lying chest",
+            "Sniffing",
+            "Playing"
+          ],
+          "windows": 1265,
+          "dogs": 7,
+          "per_dog": {
+            "22": {
+              "windows": 52,
+              "accuracy": 1.0,
+              "macro_f1_present_classes": 1.0
+            },
+            "26": {
+              "windows": 210,
+              "accuracy": 0.9904761904761905,
+              "macro_f1_present_classes": 0.9909275664369951
+            },
+            "44": {
+              "windows": 152,
+              "accuracy": 0.7368421052631579,
+              "macro_f1_present_classes": 0.6620689655172414
+            },
+            "45": {
+              "windows": 397,
+              "accuracy": 0.871536523929471,
+              "macro_f1_present_classes": 0.8571328071379547
+            },
+            "47": {
+              "windows": 197,
+              "accuracy": 0.9898477157360406,
+              "macro_f1_present_classes": 0.9472222222222222
+            },
+            "60": {
+              "windows": 76,
+              "accuracy": 0.9473684210526315,
+              "macro_f1_present_classes": 0.9166666666666666
+            },
+            "63": {
+              "windows": 181,
+              "accuracy": 0.9060773480662984,
+              "macro_f1_present_classes": 0.8421024696886764
+            }
+          }
+        },
+        "dummy": {
+          "accuracy": 0.31146245059288535,
+          "macro_f1": 0.0791641551135222,
+          "weighted_f1": 0.14793997050463753,
+          "class_report": {
+            "Walking": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 240.0
+            },
+            "Trotting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 294.0
+            },
+            "Sitting": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 143.0
+            },
+            "Lying chest": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 161.0
+            },
+            "Sniffing": {
+              "precision": 0.31146245059288535,
+              "recall": 1.0,
+              "f1-score": 0.47498493068113323,
+              "support": 394.0
+            },
+            "Playing": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 33.0
+            },
+            "accuracy": 0.31146245059288535,
+            "macro avg": {
+              "precision": 0.05191040843214756,
+              "recall": 0.16666666666666666,
+              "f1-score": 0.0791641551135222,
+              "support": 1265.0
+            },
+            "weighted avg": {
+              "precision": 0.09700885812932557,
+              "recall": 0.31146245059288535,
+              "f1-score": 0.14793997050463753,
+              "support": 1265.0
+            }
+          },
+          "confusion_matrix": [
+            [0, 0, 0, 0, 240, 0],
+            [0, 0, 0, 0, 294, 0],
+            [0, 0, 0, 0, 143, 0],
+            [0, 0, 0, 0, 161, 0],
+            [0, 0, 0, 0, 394, 0],
+            [0, 0, 0, 0, 33, 0]
+          ],
+          "confusion_order": [
+            "Walking",
+            "Trotting",
+            "Sitting",
+            "Lying chest",
+            "Sniffing",
+            "Playing"
+          ],
+          "windows": 1265,
+          "dogs": 7,
+          "per_dog": {
+            "22": {
+              "windows": 52,
+              "accuracy": 0.75,
+              "macro_f1_present_classes": 0.17142857142857143
+            },
+            "26": {
+              "windows": 210,
+              "accuracy": 0.5,
+              "macro_f1_present_classes": 0.1111111111111111
+            },
+            "44": {
+              "windows": 152,
+              "accuracy": 0.23026315789473684,
+              "macro_f1_present_classes": 0.0748663101604278
+            },
+            "45": {
+              "windows": 397,
+              "accuracy": 0.19899244332493704,
+              "macro_f1_present_classes": 0.06638655462184874
+            },
+            "47": {
+              "windows": 197,
+              "accuracy": 0.28426395939086296,
+              "macro_f1_present_classes": 0.11067193675889328
+            },
+            "60": {
+              "windows": 76,
+              "accuracy": 0.2894736842105263,
+              "macro_f1_present_classes": 0.07482993197278912
+            },
+            "63": {
+              "windows": 181,
+              "accuracy": 0.32044198895027626,
+              "macro_f1_present_classes": 0.09707112970711297
+            }
+          }
+        },
+        "model_sha256": "794d7cec8accee97ada65a45237de417ce8b7879a9531f73c6ede3add1ff7ebb"
+      }
+    },
+    "model_sha256": "794d7cec8accee97ada65a45237de417ce8b7879a9531f73c6ede3add1ff7ebb",
+    "dummy_sha256": "94efe3fe8347f1d84fc36ad03da98adbf389da12509d66b3178b9b772d06f13b",
+    "library_versions": {
+      "python": "3.9.6",
+      "numpy": "2.0.2",
+      "pandas": "2.3.3",
+      "scipy": "1.13.1",
+      "scikit-learn": "1.6.1",
+      "joblib": "1.5.3"
+    }
+  },
+  "label_audit": {
+    "dataset_version": "mendeley-vxhx934tbn-v4",
+    "source_sha256": "f5028606724b9a043f0ab098b6f622aceb58ba5f21722ddaccff0600ab2be060",
+    "raw_rows": 10611068,
+    "sessions": [
+      {
+        "dog_id": 16,
+        "test_num": 1,
+        "raw_rows": 164004
+      },
+      {
+        "dog_id": 16,
+        "test_num": 2,
+        "raw_rows": 156872
+      },
+      {
+        "dog_id": 18,
+        "test_num": 1,
+        "raw_rows": 175336
+      },
+      {
+        "dog_id": 19,
+        "test_num": 2,
+        "raw_rows": 157376
+      },
+      {
+        "dog_id": 20,
+        "test_num": 1,
+        "raw_rows": 185904
+      },
+      {
+        "dog_id": 21,
+        "test_num": 1,
+        "raw_rows": 173332
+      },
+      {
+        "dog_id": 22,
+        "test_num": 2,
+        "raw_rows": 160404
+      },
+      {
+        "dog_id": 23,
+        "test_num": 1,
+        "raw_rows": 168108
+      },
+      {
+        "dog_id": 23,
+        "test_num": 2,
+        "raw_rows": 151028
+      },
+      {
+        "dog_id": 25,
+        "test_num": 1,
+        "raw_rows": 164512
+      },
+      {
+        "dog_id": 25,
+        "test_num": 2,
+        "raw_rows": 152504
+      },
+      {
+        "dog_id": 26,
+        "test_num": 1,
+        "raw_rows": 170676
+      },
+      {
+        "dog_id": 26,
+        "test_num": 2,
+        "raw_rows": 161288
+      },
+      {
+        "dog_id": 27,
+        "test_num": 1,
+        "raw_rows": 171168
+      },
+      {
+        "dog_id": 27,
+        "test_num": 2,
+        "raw_rows": 156348
+      },
+      {
+        "dog_id": 28,
+        "test_num": 1,
+        "raw_rows": 166264
+      },
+      {
+        "dog_id": 29,
+        "test_num": 1,
+        "raw_rows": 171988
+      },
+      {
+        "dog_id": 29,
+        "test_num": 2,
+        "raw_rows": 152980
+      },
+      {
+        "dog_id": 30,
+        "test_num": 1,
+        "raw_rows": 171612
+      },
+      {
+        "dog_id": 30,
+        "test_num": 2,
+        "raw_rows": 163860
+      },
+      {
+        "dog_id": 33,
+        "test_num": 1,
+        "raw_rows": 169024
+      },
+      {
+        "dog_id": 34,
+        "test_num": 1,
+        "raw_rows": 169404
+      },
+      {
+        "dog_id": 34,
+        "test_num": 2,
+        "raw_rows": 149080
+      },
+      {
+        "dog_id": 36,
+        "test_num": 1,
+        "raw_rows": 187852
+      },
+      {
+        "dog_id": 39,
+        "test_num": 1,
+        "raw_rows": 184328
+      },
+      {
+        "dog_id": 39,
+        "test_num": 2,
+        "raw_rows": 185316
+      },
+      {
+        "dog_id": 41,
+        "test_num": 1,
+        "raw_rows": 173276
+      },
+      {
+        "dog_id": 41,
+        "test_num": 2,
+        "raw_rows": 157452
+      },
+      {
+        "dog_id": 43,
+        "test_num": 1,
+        "raw_rows": 176928
+      },
+      {
+        "dog_id": 43,
+        "test_num": 2,
+        "raw_rows": 148980
+      },
+      {
+        "dog_id": 44,
+        "test_num": 1,
+        "raw_rows": 217656
+      },
+      {
+        "dog_id": 45,
+        "test_num": 1,
+        "raw_rows": 166764
+      },
+      {
+        "dog_id": 45,
+        "test_num": 2,
+        "raw_rows": 149980
+      },
+      {
+        "dog_id": 46,
+        "test_num": 1,
+        "raw_rows": 146584
+      },
+      {
+        "dog_id": 46,
+        "test_num": 2,
+        "raw_rows": 148864
+      },
+      {
+        "dog_id": 47,
+        "test_num": 1,
+        "raw_rows": 190608
+      },
+      {
+        "dog_id": 47,
+        "test_num": 2,
+        "raw_rows": 160120
+      },
+      {
+        "dog_id": 48,
+        "test_num": 1,
+        "raw_rows": 175148
+      },
+      {
+        "dog_id": 48,
+        "test_num": 2,
+        "raw_rows": 148756
+      },
+      {
+        "dog_id": 49,
+        "test_num": 1,
+        "raw_rows": 162900
+      },
+      {
+        "dog_id": 49,
+        "test_num": 2,
+        "raw_rows": 160580
+      },
+      {
+        "dog_id": 51,
+        "test_num": 1,
+        "raw_rows": 171576
+      },
+      {
+        "dog_id": 52,
+        "test_num": 1,
+        "raw_rows": 193528
+      },
+      {
+        "dog_id": 53,
+        "test_num": 1,
+        "raw_rows": 193572
+      },
+      {
+        "dog_id": 54,
+        "test_num": 1,
+        "raw_rows": 184444
+      },
+      {
+        "dog_id": 55,
+        "test_num": 1,
+        "raw_rows": 175164
+      },
+      {
+        "dog_id": 56,
+        "test_num": 1,
+        "raw_rows": 180512
+      },
+      {
+        "dog_id": 57,
+        "test_num": 1,
+        "raw_rows": 182588
+      },
+      {
+        "dog_id": 58,
+        "test_num": 2,
+        "raw_rows": 161700
+      },
+      {
+        "dog_id": 59,
+        "test_num": 1,
+        "raw_rows": 153532
+      },
+      {
+        "dog_id": 60,
+        "test_num": 1,
+        "raw_rows": 168668
+      },
+      {
+        "dog_id": 61,
+        "test_num": 1,
+        "raw_rows": 178348
+      },
+      {
+        "dog_id": 63,
+        "test_num": 2,
+        "raw_rows": 205520
+      },
+      {
+        "dog_id": 65,
+        "test_num": 1,
+        "raw_rows": 173792
+      },
+      {
+        "dog_id": 66,
+        "test_num": 2,
+        "raw_rows": 151680
+      },
+      {
+        "dog_id": 67,
+        "test_num": 1,
+        "raw_rows": 187804
+      },
+      {
+        "dog_id": 68,
+        "test_num": 1,
+        "raw_rows": 186972
+      },
+      {
+        "dog_id": 70,
+        "test_num": 1,
+        "raw_rows": 192036
+      },
+      {
+        "dog_id": 72,
+        "test_num": 1,
+        "raw_rows": 160404
+      },
+      {
+        "dog_id": 73,
+        "test_num": 1,
+        "raw_rows": 195552
+      },
+      {
+        "dog_id": 74,
+        "test_num": 1,
+        "raw_rows": 195688
+      },
+      {
+        "dog_id": 74,
+        "test_num": 2,
+        "raw_rows": 192824
+      }
+    ],
+    "raw_annotation_cardinality": {
+      "0": 3649386,
+      "1": 4323167,
+      "2": 2486375,
+      "3": 152140
+    },
+    "annotation_combinations": {
+      "<undefined>": 3649386,
+      "Synchronization": 16720,
+      "Walking": 750318,
+      "Shaking": 41366,
+      "Sniffing": 1026178,
+      "Eating + Walking": 25552,
+      "Sitting": 389467,
+      "Eating + Sitting": 77448,
+      "Trotting": 717472,
+      "Pacing": 76766,
+      "Eating + Pacing": 449,
+      "Lying chest": 463266,
+      "Eating + Lying chest": 81368,
+      "Playing": 398320,
+      "Jumping + Playing": 20224,
+      "Playing + Tugging": 277766,
+      "Galloping + Playing": 81752,
+      "Carrying object + Playing + Trotting": 36445,
+      "Carrying object + Galloping + Playing": 89311,
+      "Standing": 370930,
+      "Jumping + Playing + Tugging": 18199,
+      "Panting + Standing": 538925,
+      "Eating + Standing": 115980,
+      "Carrying object + Jumping + Playing": 3653,
+      "Panting + Sitting": 653106,
+      "Drinking": 64721,
+      "Lying chest + Panting": 582517,
+      "Galloping": 3668,
+      "Carrying object + Walking": 6861,
+      "Carrying object + Standing": 1075,
+      "Carrying object + Playing": 44,
+      "Panting": 2331,
+      "Carrying object + Lying chest + Playing": 687,
+      "Lying chest + Playing": 58,
+      "Lying chest + Panting + Playing": 174,
+      "Bowing + Carrying object + Playing": 1265,
+      "Eating + Trotting": 10752,
+      "Extra_Synchronization": 287,
+      "Playing + Trotting": 6430,
+      "Panting + Playing + Standing": 16,
+      "Tugging": 1134,
+      "Carrying object + Trotting": 2780,
+      "Carrying object + Pacing + Playing": 1002,
+      "Carrying object + Playing + Walking": 182,
+      "Playing + Walking": 119,
+      "Eating": 219,
+      "Playing + Tugging + Walking": 3,
+      "Playing + Shaking": 303,
+      "Carrying object + Playing + Standing": 247,
+      "Playing + Standing": 60,
+      "Shaking + Synchronization": 35,
+      "Carrying object + Lying chest": 1832,
+      "Pacing + Playing": 382,
+      "Eating + Panting + Sitting": 95,
+      "Bowing": 4,
+      "Bowing + Eating": 271,
+      "Eating + Galloping": 195,
+      "Carrying object + Shaking": 91,
+      "Carrying object + Playing + Shaking": 384,
+      "Eating + Panting + Standing": 477
+    },
+    "raw_label_transitions": 23540,
+    "window_exclusions": {
+      "LABEL_TRANSITION": 13302,
+      "UNANNOTATED": 17177,
+      "FILTER_CONTEXT_AMBIGUITY": 368,
+      "MULTI_LABEL_AMBIGUITY": 12141,
+      "INSUFFICIENT_SAMPLES": 54,
+      "INCOMPLETE_COVERAGE": 60,
+      "INSUFFICIENT_RAW_SAMPLES": 60,
+      "POINT_EVENT": 224,
+      "FILTER_CONTEXT_POINT_EVENT": 6,
+      "INSUFFICIENT_FILTER_CONTEXT": 4
+    },
+    "window_primary_exclusions": {
+      "UNANNOTATED": 17175,
+      "FILTER_CONTEXT_AMBIGUITY": 368,
+      "MULTI_LABEL_AMBIGUITY": 9603,
+      "INSUFFICIENT_RAW_SAMPLES": 60,
+      "POINT_EVENT": 47,
+      "FILTER_CONTEXT_POINT_EVENT": 6,
+      "INSUFFICIENT_FILTER_CONTEXT": 4
+    },
+    "total_windows": 35398,
+    "invalid_sessions": [],
+    "behaviors": {
+      "Bowing": {
+        "raw_samples": 1540,
+        "raw_dogs": 7,
+        "raw_sessions": 7,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Carrying object": {
+        "raw_samples": 145859,
+        "raw_dogs": 43,
+        "raw_sessions": 59,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Drinking": {
+        "raw_samples": 64721,
+        "raw_dogs": 35,
+        "raw_sessions": 40,
+        "windows": 137,
+        "dogs": 19,
+        "sessions": 21
+      },
+      "Eating": {
+        "raw_samples": 312806,
+        "raw_dogs": 43,
+        "raw_sessions": 58,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Extra_Synchronization": {
+        "raw_samples": 287,
+        "raw_dogs": 1,
+        "raw_sessions": 1,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Galloping": {
+        "raw_samples": 174926,
+        "raw_dogs": 44,
+        "raw_sessions": 61,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Jumping": {
+        "raw_samples": 42076,
+        "raw_dogs": 44,
+        "raw_sessions": 60,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Lying chest": {
+        "raw_samples": 1129902,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 1009,
+        "dogs": 34,
+        "sessions": 46
+      },
+      "Pacing": {
+        "raw_samples": 78599,
+        "raw_dogs": 32,
+        "raw_sessions": 39,
+        "windows": 65,
+        "dogs": 13,
+        "sessions": 15
+      },
+      "Panting": {
+        "raw_samples": 1777641,
+        "raw_dogs": 45,
+        "raw_sessions": 61,
+        "windows": 4,
+        "dogs": 1,
+        "sessions": 1
+      },
+      "Playing": {
+        "raw_samples": 937026,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 203,
+        "dogs": 35,
+        "sessions": 44
+      },
+      "Shaking": {
+        "raw_samples": 42179,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Sitting": {
+        "raw_samples": 1120116,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 769,
+        "dogs": 31,
+        "sessions": 41
+      },
+      "Sniffing": {
+        "raw_samples": 1026178,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 2549,
+        "dogs": 45,
+        "sessions": 62
+      },
+      "Standing": {
+        "raw_samples": 1027710,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 567,
+        "dogs": 26,
+        "sessions": 33
+      },
+      "Synchronization": {
+        "raw_samples": 16755,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 0,
+        "dogs": 0,
+        "sessions": 0
+      },
+      "Trotting": {
+        "raw_samples": 773879,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 1516,
+        "dogs": 42,
+        "sessions": 58
+      },
+      "Tugging": {
+        "raw_samples": 297102,
+        "raw_dogs": 39,
+        "raw_sessions": 51,
+        "windows": 1,
+        "dogs": 1,
+        "sessions": 1
+      },
+      "Walking": {
+        "raw_samples": 783035,
+        "raw_dogs": 45,
+        "raw_sessions": 62,
+        "windows": 1315,
+        "dogs": 43,
+        "sessions": 60
+      }
+    },
+    "selected_windows": 7361,
+    "unselected_clear_windows": 774
+  },
+  "replay": {
+    "source": "public_canine_dataset",
+    "recording_mode": "DATASET_REPLAY",
+    "dataset_source": "https://data.mendeley.com/datasets/vxhx934tbn/4",
+    "dataset_version": "mendeley-vxhx934tbn-v4",
+    "dog_id": 22,
+    "test_num": 2,
+    "session_id": "dog-22-test-2",
+    "split": "test",
+    "model_version": "goal3-v1",
+    "replay_schema_version": "guidesense-recorded-canine-replay-v1",
+    "source_sha256": "f5028606724b9a043f0ab098b6f622aceb58ba5f21722ddaccff0600ab2be060",
+    "model_sha256": "794d7cec8accee97ada65a45237de417ce8b7879a9531f73c6ede3add1ff7ebb",
+    "timestamp_basis": "seconds_since_test_start; not Unix/live time",
+    "start": 567.0,
+    "end": 597.0,
+    "sampling_rate": 50,
+    "samples": 1500,
+    "windows": 10,
+    "raw_samples": 3000,
+    "units": {
+      "acceleration": "UNKNOWN",
+      "gyroscope": "UNKNOWN"
+    },
+    "unit_space": "mendeley-vxhx934tbn-v4-native-unverified",
+    "preprocessing_version": "goal3-back50hz-strict3s-v1",
+    "signal_representation": "Back CSV -> shared timestamp interpolation + anti-alias FIR",
+    "prediction_timing": "offline; withhold predictions until window_end+0.2s replay time",
+    "attribution": "Vehkaoja, Somppi, Törnqvist, Valldeoriola Cardó, Kumpulainen, Väätäjä, Majaranta, Surakka, Kujala, Vainio. Movement Sensor Dataset for Dog Behavior Classification, Mendeley Data v4, DOI 10.17632/vxhx934tbn.4. CC BY 4.0.",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "changes": "Back selection, 100->50Hz FIR, relative time, 3s activity inference; no unit conversion",
+    "is_live": false,
+    "is_training_data": false,
+    "files": {
+      "samples.jsonl": "54837b9d73ea63149f8041afb17f83112e38e114a30eb77638806b2fac40e1ed",
+      "windows.jsonl": "240f1fceec0a4ad7f6563e27ef3793a68b33628e1980b0ea33a526cc96a3e5f4",
+      "raw-back.csv": "368e4a26ead86b0316dbd09d6d9c754bb9b3712866d1e09f066333039d0a7b44"
+    }
+  }
+}

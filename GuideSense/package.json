@@ -1,0 +1,27 @@
+{
+  "name": "guidesense",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "mobile": "npm run start --workspace @guidesense/mobile",
+    "dashboard": "npm run dev --workspace @guidesense/dashboard",
+    "build": "npm run build --workspace @guidesense/dashboard",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^24.0.0",
+    "prettier": "^3.6.0",
+    "typescript": "~5.9.2",
+    "vitest": "^5.0.3"
+  }
+}

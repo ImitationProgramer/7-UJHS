@@ -1,0 +1,22 @@
+# Local configuration and credentials (examples are safe to commit).
+.env
+.env.*
+!.env.example
+!.env.*.example
+.netrc
+.npmrc
+.pypirc
+.aws/
+.ssh/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_ed25519
+
+# Local tooling and OS files.
+.DS_Store
+.ruff_cache/

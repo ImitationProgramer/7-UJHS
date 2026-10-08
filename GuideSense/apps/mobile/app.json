@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "GuideSense",
+    "slug": "guidesense",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "dev.guidesense.sensor",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSLocalNetworkUsageDescription": "Mac의 GuideSense 서버에 센서 데이터를 전송합니다.",
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true,
+          "NSAllowsArbitraryLoads": true
+        }
+      }
+    },
+    "plugins": [
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "GuideSense가 가속도와 회전 센서를 수집하도록 허용합니다."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "GuideSense가 스트리밍 중 현재 위치를 Mac에 전송하도록 허용합니다."
+        }
+      ]
+    ]
+  }
+}

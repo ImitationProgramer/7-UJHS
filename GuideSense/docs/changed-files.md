@@ -1,0 +1,57 @@
+# 변경 파일 목록
+
+빈 저장소에서 아래 파일들을 새로 생성했다. node_modules, .venv, 빌드 결과, 실행 중 관찰 결과는 Git에서 제외한다.
+
+- `.gitignore`
+- `.prettierignore`
+- `.prettierrc.json`
+- `DESIGN.md`
+- `README.md`
+- `apps/dashboard/.env.example`
+- `apps/dashboard/index.html`
+- `apps/dashboard/package.json`
+- `apps/dashboard/src/App.tsx`
+- `apps/dashboard/src/main.tsx`
+- `apps/dashboard/src/styles.css`
+- `apps/dashboard/src/useSensorStream.ts`
+- `apps/dashboard/tsconfig.json`
+- `apps/dashboard/vite.config.ts`
+- `apps/mobile/.env.example`
+- `apps/mobile/App.tsx`
+- `apps/mobile/app.json`
+- `apps/mobile/index.ts`
+- `apps/mobile/package.json`
+- `apps/mobile/src/sources.ts`
+- `apps/mobile/src/stream.ts`
+- `apps/mobile/tsconfig.json`
+- `data/external/.gitkeep`
+- `docs/architecture.md`
+- `docs/changed-files.md`
+- `docs/premium-audit.json`
+- `docs/validation.md`
+- `ml/gait/.gitkeep`
+- `package-lock.json`
+- `package.json`
+- `packages/protocol/package.json`
+- `packages/protocol/src/index.ts`
+- `packages/protocol/src/theme.ts`
+- `packages/protocol/tsconfig.json`
+- `playwright.config.ts`
+- `premium-ui.json`
+- `scripts/observe_dashboard.mjs`
+- `scripts/observe_device.py`
+- `services/api/guidesense_api/__init__.py`
+- `services/api/guidesense_api/main.py`
+- `services/api/guidesense_api/models.py`
+- `services/api/pyproject.toml`
+- `services/api/requirements-dev.txt`
+- `services/api/requirements.lock.txt`
+- `services/api/requirements.txt`
+- `services/api/tests/test_pipeline.py`
+- `tests/e2e/dashboard.spec.ts`
+- `tests/mobile.test.ts`
+- `tests/protocol.test.ts`
+- `vitest.config.mts`
+- `apps/mobile/src/location.ts`
+- `tests/location.test.ts`
+- `docs/e2e-evidence.json`

@@ -1,0 +1,11 @@
+package-lock.json
+services/
+artifacts/
+dist/
+node_modules/
+.expo/
+test-results/
+playwright-report/
+docs/premium-audit.json
+data/external/
+data/captures/

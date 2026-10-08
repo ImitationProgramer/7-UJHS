@@ -1,0 +1,20 @@
+{
+  "profile": "product-admin",
+  "sourceRoots": [
+    "apps/dashboard/src",
+    "apps/mobile/src",
+    "apps/mobile/App.tsx"
+  ],
+  "locale": "ko-KR",
+  "canonicalMap": "DESIGN.md",
+  "requiredCapabilities": ["Form", "Scrollbar", "Select/Listbox"],
+  "commands": {
+    "typecheck": "npm run typecheck",
+    "unit": "npm test",
+    "e2e": "npm run test:e2e"
+  },
+  "requiredCommands": ["typecheck", "unit", "e2e"],
+  "ownership": {
+    "Select/Listbox": "native"
+  }
+}
