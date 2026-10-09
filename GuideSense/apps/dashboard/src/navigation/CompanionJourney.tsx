@@ -26,10 +26,14 @@ export function CompanionJourney({
   address,
   candidate,
   onFrame,
+  immersive = false,
+  onStart,
 }: {
   address: string;
   candidate: Candidate;
   onFrame: (frame: CompanionFrame) => void;
+  immersive?: boolean;
+  onStart: () => void;
 }) {
   const { snapshot, history, connected, pending, error, command } =
     useReplay(address);
@@ -82,6 +86,7 @@ export function CompanionJourney({
   }, [snapshot, connected, candidate]);
   function begin(restart = false) {
     if (pending || !connected || !available) return;
+    onStart();
     awaitingReset.current = true;
     records.current = [];
     setObservations([]);
@@ -186,7 +191,12 @@ export function CompanionJourney({
           <button
             className="navigation-play"
             disabled={!connected || !available || pending}
-            onClick={() => (state === 'PAUSED' ? command('resume') : begin())}
+            onClick={() => {
+              if (state === 'PAUSED') {
+                onStart();
+                command('resume');
+              } else begin();
+            }}
           >
             <RouteIcon name="play" />
             {state === 'PAUSED'
@@ -244,6 +254,7 @@ export function CompanionJourney({
           start={snapshot?.manifest?.start ?? 0}
           windowStart={analysisStart}
           compact
+          fill={immersive}
         />
       </div>
       {snapshot?.manifest &&

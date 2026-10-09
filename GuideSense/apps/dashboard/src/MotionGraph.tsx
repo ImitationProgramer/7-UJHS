@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 export type MotionGraphSample = {
   timestamp: number;
   accelerometer: { x: number; y: number; z: number } | null;
@@ -11,16 +11,36 @@ export const MotionGraph = memo(function MotionGraph({
   windowStart,
   compact = false,
   live = false,
+  fill = false,
 }: {
   samples: MotionGraphSample[];
   start: number;
   windowStart: number;
   compact?: boolean;
   live?: boolean;
+  fill?: boolean;
 }) {
+  const plot = useRef<SVGSVGElement>(null);
+  const [size, setSize] = useState({ width: 360, height: 120 });
+  useEffect(() => {
+    if (!fill || !plot.current) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const width = Math.max(120, Math.round(entry.contentRect.width));
+      const height = Math.max(70, Math.round(entry.contentRect.height));
+      setSize((previous) =>
+        previous.width === width && previous.height === height
+          ? previous
+          : { width, height },
+      );
+    });
+    observer.observe(plot.current);
+    return () => observer.disconnect();
+  }, [fill]);
   const left = Math.max(start, (samples.at(-1)?.timestamp ?? start) - 15);
   const right = Math.max(left + 3, samples.at(-1)?.timestamp ?? start + 3);
-  const width = compact ? 360 : 640;
+  const width = fill ? size.width : compact ? 360 : 640;
+  const height = fill ? size.height : 120;
+  const baseline = height - 25;
   const plotEnd = width - 20;
   const x = (t: number) => 36 + ((t - left) / (right - left)) * (plotEnd - 36);
   return (
@@ -60,7 +80,9 @@ export const MotionGraph = memo(function MotionGraph({
           }
           segments
             .at(-1)!
-            .push(`${x(sample.timestamp)},${90 - (value / max) * 64}`);
+            .push(
+              `${x(sample.timestamp)},${baseline - 5 - (value / max) * (height - 56)}`,
+            );
         });
         const unit = live ? (sensor === 'accelerometer' ? 'g' : 'rad/s') : '';
         const label =
@@ -83,7 +105,8 @@ export const MotionGraph = memo(function MotionGraph({
               </span>
             </div>
             <svg
-              viewBox={`0 0 ${width} 120`}
+              ref={sensor === 'accelerometer' ? plot : undefined}
+              viewBox={`0 0 ${width} ${height}`}
               role="img"
               aria-label={`${label}, 기록 상대초 ${(left - start).toFixed(1)}–${(right - start).toFixed(1)}`}
             >
@@ -96,15 +119,18 @@ export const MotionGraph = memo(function MotionGraph({
                     Math.min(plotEnd, x(windowStart + 3)) -
                       Math.max(36, x(windowStart)),
                   )}
-                  height="80"
+                  height={height - 40}
                   className="window-shade"
                 />
               )}
-              <path d={`M36 15 V95 H${plotEnd}`} className="graph-axis" />
+              <path
+                d={`M36 15 V${baseline} H${plotEnd}`}
+                className="graph-axis"
+              />
               <text x="1" y="24">
                 {max.toFixed(1)}
               </text>
-              <text x="20" y="95">
+              <text x="20" y={baseline}>
                 0
               </text>
               {(segments.length ? segments : [[]]).map((points, index) => (
@@ -114,10 +140,10 @@ export const MotionGraph = memo(function MotionGraph({
                   className={`trace ${sensor}`}
                 />
               ))}
-              <text x="36" y="115">
+              <text x="36" y={height - 5}>
                 {(left - start).toFixed(1)}s
               </text>
-              <text x={plotEnd} y="115" textAnchor="end">
+              <text x={plotEnd} y={height - 5} textAnchor="end">
                 {(right - start).toFixed(1)}s
               </text>
             </svg>

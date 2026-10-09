@@ -39,6 +39,7 @@ test('search → facilities comparison → simulation, endpoint edits clear stal
     path: 'artifacts/navigation-comparison.png',
     fullPage: true,
   });
+  await page.getByRole('button', { name: '전체 화면 나가기' }).click();
   await page.setViewportSize({ width: 320, height: 900 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect

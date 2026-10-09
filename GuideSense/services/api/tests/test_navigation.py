@@ -300,6 +300,33 @@ def test_http_contract_validation_key_missing_and_search():
         assert result.json()["detail"]["code"] == "key_missing"
 
 
+def test_current_location_validation_and_endpoint_specific_route_errors():
+    app = FastAPI()
+    install_navigation(app, client=FakeClient())
+    app.state.navigation.data = BOUNDARY, [facility()], {}
+    with TestClient(app) as client:
+        inside = {"lon": A[0], "lat": A[1], "name": "현재 위치"}
+        outside = {**inside, "lat": 38}
+        assert client.post("/api/navigation/validate-location", json=inside).json() == {
+            "inServiceArea": True
+        }
+        assert client.post("/api/navigation/validate-location", json=outside).json() == {
+            "inServiceArea": False
+        }
+        assert (
+            client.post(
+                "/api/navigation/validate-location", json={**inside, "lat": 100}
+            ).status_code
+            == 422
+        )
+        for target, label in (("start", "출발지"), ("end", "도착지")):
+            payload = request().model_dump()
+            payload[target] = outside
+            response = client.post("/api/navigation/routes", json=payload)
+            assert response.status_code == 422
+            assert response.json()["detail"]["message"].startswith(label)
+
+
 @pytest.mark.parametrize(
     "status,code",
     [(401, "authentication"), (403, "authentication"), (429, "quota"), (500, "upstream_error")],
@@ -321,6 +348,18 @@ def test_csv_audit_real_data():
     assert len(rows) == 987
     assert audit["signalCounts"] == {"yes": 272, "no": 715}
     assert audit["invalidCoordinates"] == 0
+
+
+@pytest.mark.parametrize("mode,enabled", [("", False), ("0", False), ("1", True), ("true", True)])
+def test_demo_departure_is_explicit_and_inside_real_service_boundary(monkeypatch, mode, enabled):
+    monkeypatch.setenv("NAV_DEMO_MODE", mode)
+    metadata = NavigationService(client=FakeClient()).metadata()
+    point = metadata["demoStart"]
+    if not enabled:
+        assert point is None
+    else:
+        assert point["name"] == "왕십리역 (시연 위치)"
+        assert in_boundary([point["lon"], point["lat"]], metadata["boundary"])
 
 
 def test_csv_unknown_invalid_and_duplicates(tmp_path):

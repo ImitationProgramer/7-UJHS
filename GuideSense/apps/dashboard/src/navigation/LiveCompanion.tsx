@@ -5,7 +5,13 @@ import { useSensorStream } from '../useSensorStream';
 import { appendLiveFrame, EMPTY_LIVE_HISTORY } from './liveHistory';
 import './live-demo.css';
 
-export function LiveCompanion({ address }: { address: string }) {
+export function LiveCompanion({
+  address,
+  immersive = false,
+}: {
+  address: string;
+  immersive?: boolean;
+}) {
   const { snapshot, transport, error } = useSensorStream(address);
   const connected =
     transport === 'connected' && snapshot?.status === 'connected';
@@ -86,6 +92,7 @@ export function LiveCompanion({ address }: { address: string }) {
           windowStart={0}
           compact
           live
+          fill={immersive}
         />
       </div>
       <div className="live-analysis-boundary">

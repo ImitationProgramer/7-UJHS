@@ -69,7 +69,7 @@ def test_valid_handshake_keeps_key_server_side(client, monkeypatch):
         assert parts["sdp"] == OFFER
         config = json.loads(parts["session"])
         assert config["model"] == "test-model"
-        assert {tool["name"] for tool in config["tools"]} == {"search_places", "select_place", "get_current_location"}
+        assert {tool["name"] for tool in config["tools"]} == {"search_places", "select_place", "get_current_location", "end_session"}
         assert config["audio"]["input"]["transcription"]["language"] == "ko"
         return io.BytesIO(OFFER.encode())
 

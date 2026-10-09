@@ -133,6 +133,7 @@
   margin-top: 12px;
 }
 .voice-stage .voice-transcripts,
+.voice-stage .voice-place-details,
 .voice-stage .voice-candidates {
   text-align: left;
   margin-top: 16px;

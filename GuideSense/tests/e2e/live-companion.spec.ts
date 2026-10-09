@@ -49,6 +49,13 @@ test('phone stream reaches navigation graph and disconnect clears stale values',
   await expect(page.getByTestId('live-device-status')).toHaveText(
     '휴대폰 연결됨',
   );
+  await page.getByRole('button', { name: '이동 시작', exact: true }).click();
+  await expect(page.getByTestId('navigation-panel')).toHaveClass(
+    /is-immersive/,
+  );
+  await page.getByRole('button', { name: '일시정지', exact: true }).click();
+  const before = await graph.getAttribute('points');
+  await expect.poll(() => graph.getAttribute('points')).not.toBe(before);
   await page.setViewportSize({ width: 320, height: 1000 });
   expect(
     await page.evaluate(

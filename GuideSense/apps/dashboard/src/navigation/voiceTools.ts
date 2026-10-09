@@ -73,6 +73,7 @@ export function readCurrentLocation(signal: AbortSignal): Promise<Point> {
 export function createVoiceTools(options: {
   address: string;
   signal: AbortSignal;
+  demoStart?: Point | null;
   onCandidates: (target: VoiceTarget, places: Place[]) => void;
   onSelect: (target: VoiceTarget, point: Point) => void;
 }) {
@@ -113,13 +114,39 @@ export function createVoiceTools(options: {
       if (options.signal.aborted) return { error: 'session_closed' };
       try {
         const args: unknown = JSON.parse(raw);
+        if (name === 'end_session') {
+          z.object({}).strict().parse(args);
+          return { ended: true };
+        }
         if (name === 'get_current_location') {
           z.object({}).strict().parse(args);
           const locationRevision = ++revision.start;
-          const point = await readCurrentLocation(options.signal);
+          const point =
+            options.demoStart ?? (await readCurrentLocation(options.signal));
           if (options.signal.aborted) return { error: 'session_closed' };
           if (revision.start !== locationRevision)
             return { error: 'selection_changed' };
+          const response = await fetch(
+            navigationUrl(options.address, 'validate-location'),
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(point),
+              signal: options.signal,
+            },
+          );
+          const location = z
+            .object({ inServiceArea: z.boolean() })
+            .parse(await readResponse(response));
+          if (options.signal.aborted) return { error: 'session_closed' };
+          if (revision.start !== locationRevision)
+            return { error: 'selection_changed' };
+          if (!location.inServiceArea)
+            return {
+              error: 'outside_service_area',
+              message:
+                '현재 위치가 성동구 밖이라 출발지로 사용할 수 없어요. 성동구 안에서 출발할 장소를 말해 주세요.',
+            };
           cache.start = [];
           options.onCandidates('start', []);
           options.onSelect('start', point);
@@ -127,7 +154,7 @@ export function createVoiceTools(options: {
             selected: true,
             target: 'start',
             name: point.name,
-            source: 'browser_geolocation',
+            source: options.demoStart ? 'demo_location' : 'browser_geolocation',
           };
         }
         if (name === 'select_place') {
@@ -157,17 +184,18 @@ export function createVoiceTools(options: {
         options.onCandidates(parsed.target, places);
         return {
           target: parsed.target,
-          places: places.map(({ id, name: placeName, address }) => ({
+          places: places.map(({ id, name: placeName, address }, index) => ({
+            number: index + 1,
             place_id: id,
             name: placeName,
             address,
           })),
           instruction:
             places.length > 1
-              ? 'Ask the user to distinguish these places before selecting.'
+              ? '번호·이름·구분되는 주소를 최대 3개씩 음성으로 읽고 답을 기다리세요. 말로 고른 번호나 이름에 해당하는 최신 place_id로 select_place를 호출하세요. 구분할 수 없으면 추가 단서를 물어 다시 검색하세요. 화면 클릭을 요구하지 마세요.'
               : places.length === 1
-                ? 'Confirm this place with the user before selecting.'
-                : 'No matching place in Seongdong. Ask for a more specific place.',
+                ? '이름과 주소를 음성으로 읽어 맞는지 물어보세요. 말로 확인받으면 select_place를 호출하세요. 화면 클릭을 요구하지 마세요.'
+                : '성동구 안에 일치하는 장소가 없습니다. 구체적인 장소명이나 주소를 말로 요청하세요.',
         };
       } catch (error) {
         if (options.signal.aborted) return { error: 'session_closed' };
@@ -181,7 +209,7 @@ export function createVoiceTools(options: {
           message:
             name === 'get_current_location' && error instanceof Error
               ? error.message
-              : '장소를 확인하지 못했습니다. 다시 검색하거나 직접 입력해 주세요.',
+              : '장소를 확인하지 못했습니다. 장소명이나 주소를 다시 말해 주세요.',
         };
       }
     },

@@ -18,7 +18,7 @@
 
 ## Information architecture
 
-음성 → 경로 → 움직임 데이터 순서로 진행한다. 처음에는 작은 브랜드와 입자 구름 속 마이크만 주요 행동으로 보인다. 출발·도착 입력과 직접 설정은 제공하지 않는다. 음성으로 목적지를 선택하면 현재 위치를 출발지로 자동 경로 조회한다. 위치 확인 실패 시 출발할 장소도 음성으로 물어본다.
+음성 → 경로 → 움직임 데이터 순서로 진행한다. 처음에는 작은 브랜드와 입자 구름 속 마이크만 주요 행동으로 보인다. 출발·도착 입력과 직접 설정은 제공하지 않는다. 음성으로 목적지를 선택하면 설정된 시연 위치 또는 검증된 실제 현재 위치를 출발지로 자동 경로 조회한다. 일반 모드의 위치 확인 실패 시 출발할 장소도 음성으로 물어본다.
 
 경로 응답 후 지도가 아래에서 올라오고 그 아래에 움직임 데이터가 나타난다. 후보별 근거와 대화 기록은 details에 담는다. VoicePlanner는 단계 전환에도 유지하여 연결이 끊기지 않는다. 실시간 휴대폰 데이터와 공개 Replay 출처는 결과 단계에서 구분한다.
 
@@ -44,7 +44,7 @@ Inputs 12px radius; route rows 14px; preview 18px; actions pill. No shadows on a
 
 ## Layout and responsive behavior
 
-`voice-stage.css`가 최종 레이아웃 계약이다. 흰색 전체 화면, 최대1120px 세로 흐름이다. 초기 음성 제어는 중앙, 경로 조회 후에는 상단으로 모이고 지도→안내→접힌 근거→움직임 데이터를 배치한다. 760px 이하에서는20px 여백과 세로 그래프를 사용한다.
+`voice-stage.css`는 초기·경로 검토 화면, `immersive-stage.css`는 이동 화면의 레이아웃 계약이다. 검토 화면은 흰색 배경과 최대1120px 세로 흐름이다. 초기 음성 제어는 중앙, 경로 조회 후에는 상단으로 모이고 지도→안내→접힌 근거→움직임 데이터를 배치한다. 검토 화면의 760px 이하에서는20px 여백과 세로 그래프를 사용한다. 이동 중에는 전체 화면 지도·가장자리 음성 띠와 하단 1/3의 가로 그래프 두 개로 전환한다.
 
 ## Interaction and motion
 
@@ -52,7 +52,7 @@ Inputs 12px radius; route rows 14px; preview 18px; actions pill. No shadows on a
 
 마이크 주위 입자는 깊이가 있는 하나의 유기적인 입자 표면으로 읽혀야 한다. [Recursive Erosion](https://21st.dev/@mengto/components/recursive-erosion)의 미리보기에서 관찰한 문법(느린 회전, 연속적인 표면 변형, 부분 침식과 회복, 표면을 타고 흐르는 밝은 띠)을 독립적인 Canvas 구현으로 번역한다. 원본의 금색·어두운 배경이나 코드는 복제하지 않는다. 흰 배경·파란색, 중심 마이크의 가독성을 유지한다. 포인터는 국소 표면을 변형하고 전체를 약 8% 키운다. 마이크와 AI 원격 음성 스트림의 실제 RMS는 팽창·변형·흐름에 반영한다. 원형 버튼 배경·그림자는 없으며 키보드 포커스는 유지한다. DPR≤2, RAF/이벤트 정리, 비활성 탭 정지, reduced-motion 정적 표면을 적용한다.
 
-숨긴 지도·데이터는 DOM에서 제외한다. 네이티브 details·버튼·명시적 h1과 키보드 포커스를 유지한다. 오류·재시도는 항상 접근 가능하다. reduced-motion은 단계 애니메이션과 지도 이동도 제거한다.
+경로 응답 전에는 지도·데이터를 마운트하지 않는다. 이후 단계 전환은 지도·데이터·음성 컴포넌트를 유지한다. 네이티브 details·버튼과 키보드 포커스를 유지한다. 오류·재시도는 접근 가능하고 전체 화면에서는 종료 버튼/Escape로 검토 화면에 돌아갈 수 있다. reduced-motion은 단계 애니메이션과 지도 이동도 제거한다.
 
 ## States and claims
 
@@ -72,11 +72,13 @@ See `docs/goal5-ui-validation.md`. Scope: standalone entry, legacy isolation, ac
 
 ## Voice entry
 
-큰 입자 구름 속 마이크가 시작 제어이다. 연결 시 종료 버튼과 현재 상태를 표시한다. 위치 권한·OpenAI 음성 전송 안내는 작은 텍스트로 남긴다. 검색 후보는 필요한 때만 표시한다. 목적지 확정 후 자동 경로 조회한다. 수동 출발·도착 입력은 없다.
+시연 모드는 서버의 `NAV_DEMO_MODE=1`로 명시적으로 켠다. 왕십리역을 가상 기본 출발지로 사용하고 위치 권한을 요청하지 않는다. `metadata.demoStart`가 위치의 단일 설정 출처이며, 메타데이터를 읽기 전에는 음성 시작을 비활성화하여 실제 위치로 잘못 진입하지 않는다. 기존 작은 안내 문구와 AI의 첫 인사에 시연 위치임을 밝힌다. 사용자는 음성으로 출발지를 바꿀 수 있고 지도·시설 판단·실제 센서 입력은 기존 계약을 유지한다. 기본 일반 모드에서는 실제 브라우저 위치를 검증해 사용한다.
+
+큰 입자 구름 속 마이크가 시작 제어이다. 연결 시 종료 버튼과 현재 상태를 표시한다. 위치 권한·OpenAI 음성 전송 안내는 작은 텍스트로 남긴다. 장소 후보 확인·선택·정정은 화면 조작 없이 음성으로 완료한다. AI가 최신 후보의 번호·이름·구분되는 주소를 최대 3개씩 읽고 사용자의 음성 답을 기다린다. 구분 근거가 부족하면 추가 단서를 물어보며 임의 선택하지 않는다. 검색 후보·주소는 기본적으로 접힌 ‘장소 상세 보기’ 안에 읽기 전용 목록으로 보관한다. 대화 기록의 기존 네이티브 details 패턴과 색상 토큰을 재사용하며 후보 선택 버튼은 제공하지 않는다. 목적지 확정 후 자동 경로 조회하고 지도·센서는 기존대로 표시한다. 수동 출발·도착 입력은 없다. 명시적인 음성 대화 종료 요청은 마이크와 연결을 정리한다.
 
 ## Source of truth
 
-Status: Active. Last refreshed: 2026-10-09. Current surface: `/` demo dashboard. Evidence: `NavigationPanel.tsx`, `LiveCompanion.tsx`, `VoicePlanner.tsx`, `MotionGraph.tsx`, existing `DESIGN.md`, user annotation showing replay/live confusion. The current demo contract supersedes previous map-overlay layouts.
+Status: Active. Last refreshed: 2026-10-09. Current surface: `/` demo dashboard. Evidence: `NavigationPanel.tsx`, `LiveCompanion.tsx`, `VoicePlanner.tsx`, `MotionGraph.tsx`, existing `DESIGN.md`, user annotation showing replay/live confusion. The movement-stage contract below supersedes the previous scrolling-only layout during movement.
 
 ## Brand
 
@@ -92,11 +94,20 @@ Status: Active. Last refreshed: 2026-10-09. Current surface: `/` demo dashboard.
 
 ## Design principles
 
-지도와 센서가 서로 가리지 않는다. 기능의 이름보다 입력→처리→결과가 보이게 한다. 실시간·재생·미연결 상태는 글자로 구분한다. 설명의 상세 내용은 스크롤로 접근하되 중요한 제어와 숫자를 우선 배치한다.
+전체 화면 지도는 하단 그래프 높이만큼 경로를 위로 맞춰 출발·도착과 이동 경로를 읽을 수 있게 한다. 기능의 이름보다 입력→처리→결과가 보이게 한다. 실시간·재생·미연결 상태는 글자로 구분한다. 설명의 상세 내용은 스크롤로 접근하되 중요한 제어와 숫자를 우선 배치한다.
 
 ## Components
 
-기존 VoicePlanner, NavigationMap, MotionGraph, LiveCompanion, CompanionJourney, JourneyRecheck를 재사용한다. `navigation.css`의 기존 토큰을 유지하며 발표용 최종 배치는 `voice-stage.css`, 센서의 상태·읽기 쉬운 수치는 `live-demo.css`에서 확장한다. 새로운 UI 라이브러리나 그래프 라이브러리는 추가하지 않는다.
+기존 VoicePlanner, NavigationMap, MotionGraph, LiveCompanion, CompanionJourney, JourneyRecheck를 재사용한다. `navigation.css`의 기존 토큰을 유지하며 발표용 검토 배치는 `voice-stage.css`, 이동 중 전체 화면 배치는 `immersive-stage.css`, 센서의 상태·읽기 쉬운 수치는 `live-demo.css`에서 확장한다. 새로운 UI 라이브러리나 그래프 라이브러리는 추가하지 않는다.
+
+### Canonical UI Map
+
+| Capability     | Canonical owner                                                                | Source of truth                                                    | Allowed variants                                            | Verification                                                   |
+| -------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------- | -------------------------------------------------------------- |
+| Form           | `deviceWebSocketUrl` + 플랫폼 입력 요소                                        | `packages/protocol/src/index.ts`, `docs/design-diagnostics.md`     | 진단 웹 noValidate, 모바일 URL keyboard; 길찾기는 음성 입력 | URL 단위 테스트, `tests/e2e/dashboard.spec.ts`                 |
+| Select/Listbox | `ReplayPanel.tsx`, `NavigationPanel.tsx`, `CompanionJourney.tsx` native select | Replay catalog, 본 문서의 Companion layer                          | OS-owned popup; 재생 중 기록 선택 잠금                      | `tests/e2e/live-companion.spec.ts`, `tests/e2e/replay.spec.ts` |
+| Scrollbar      | `apps/dashboard/src/styles.css`                                                | `--scroll-thumb`, `--scroll-track` 및 `docs/design-diagnostics.md` | 강제 색상은 시스템 기본, navigation은 기존 thin geometry    | 브라우저 computed style, narrow E2E                            |
+| Disclosure     | `VoicePlanner.tsx`와 `NavigationPanel.tsx`의 네이티브 details                  | 본 문서의 Voice entry                                              | 대화·장소 상세·경로 근거, 기본 접힘·사용자만 열기           | `tests/e2e/voice.spec.ts`, `tests/e2e/navigation.spec.ts`      |
 
 ## Accessibility
 
@@ -104,11 +115,13 @@ Status: Active. Last refreshed: 2026-10-09. Current surface: `/` demo dashboard.
 
 ## Responsive behavior
 
-노트북·외부 모니터가 우선이다. 지도와 데이터는 독립 스크롤 열 대신 문서 흐름으로 이어진다. 좁은 화면의 상세 내용은 문서 흐름으로 옮기며 원본 데이터와 제어를 숨기지 않는다.
+노트북·외부 모니터가 우선이다. 경로 검토 단계의 지도와 데이터는 문서 흐름으로 이어진다. 이동 단계는 화면 전체 지도와 하단 1/3 그래프를 사용한다. 좁은 화면에서도 두 센서 그래프를 나란히 표시하고 SVG 눈금은 실제 표시 크기에 맞춘다. 상세 데이터와 출처·기록 저장은 전체 화면을 나가면 기존 위치에서 접근한다.
 
 ## Interaction states
 
 음성 대기/연결 중/대화 중, 휴대폰 서버 연결/기기 대기/실제 수신, Replay 경로 필요/재생/정지/오류 상태를 각각 표시한다. 연결되지 않은 그래프는 빈 축과 ‘—’를 보여준다. 경로 조회 실패 시 기존 잘못된 결과를 남기지 않는다.
+
+현재 위치는 서버의 성동구 행정 경계 검증을 통과한 뒤에만 출발지로 설정한다. 범위 밖이면 목적지는 유지하고 성동구 안의 출발지를 음성으로 요청한다. 최초 경로 조회의 성공·추천 없음·오류·25초 시간 초과는 화면과 동일한 결과를 음성 대화에 전달한다. 말하는 중인 응답은 끝까지 기다린 뒤 최신 결과를 한 번 전달하며, 장소 변경으로 취소된 조회 결과는 말하지 않는다. 오류 후 같은 장소를 다시 확인하는 음성 선택은 재조회로 처리한다.
 
 ## Content voice
 
@@ -121,3 +134,13 @@ React/TypeScript·기존 Leaflet·WebRTC·WebSocket 연결을 유지한다. `/di
 ## Open questions
 
 없음. 사용자가 노트북·외부 모니터 중심의 시연 화면으로 지정했다. 실제 휴대폰 데이터 존재 여부는 실행 중 연결 상태에 따라 달라지며 화면이 이를 그대로 표시한다.
+
+## Movement stage — 2026-10-09
+
+사용자의 최신 지시: 이동을 시작하면 지도가 전체 화면을 채우고 음성 구름이 사방 가장자리로 퍼져 띠가 된다. 하단 1/3은 움직임 그래프가 차지한다.
+
+- 추천 가능한 경로의 ‘이동 시작’ 또는 공개 기록의 ‘동행 재생’이 실제 재생 상태로 바뀔 때 진입한다. 일시정지·재생 완료에도 배치를 유지한다. 전체 화면 나가기/Escape는 기존 검토 화면으로 돌아가며 음성·센서·재생 세션을 끊지 않는다. 출발·도착 변경은 기존대로 경로와 이동 화면을 초기화한다.
+- 동일한 Canvas의 입자들이 1.25초 smoothstep 곡선으로 원래 구름에서 둥근 화면 둘레로 퍼진다. 띠의 반응은 기존 실제 마이크·AI 출력 레벨을 사용한다. Canvas는 pointer-events:none이며 지도를 조작할 수 있다. reduced motion에서는 바로 정적인 띠를 그린다.
+- 지도는 뷰포트 전체에 유지하고 하단 33.333dvh는 선택된 실시간/공개 Replay 그래프를 표시한다. 출처, 미연결·오류, 재생 제어, AI 분류와 주석 불일치는 유지한다. 수신되지 않은 센서값을 만들어 그리지 않는다.
+- 작은 음성 종료 버튼과 전체 화면 나가기를 상단에 둔다. 후보·주소·대화·비교 상세는 기본 검토 화면의 접힌 details로 보관한다. 전환 중 컴포넌트를 재생성하지 않는다.
+- 검증: `tests/e2e/immersive.spec.ts`에서 데스크톱·320px 지도/그래프 크기, 사방 입자, 음성 세션 유지, 일시정지, 복귀, reduced motion과 axe를 확인한다. `companion.spec.ts`는 복구된 공개 기록의 실제 모델 재분석 및 재생 제어를 확인한다.

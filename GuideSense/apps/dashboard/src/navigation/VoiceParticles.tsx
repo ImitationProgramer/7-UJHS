@@ -5,13 +5,15 @@ type VoiceLevels = { input: number; output: number };
 export function VoiceParticles({
   active,
   levelRef,
+  expanded = false,
 }: {
   active: boolean;
   levelRef?: RefObject<VoiceLevels>;
+  expanded?: boolean;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const activity = useRef({ active, levelRef });
-  activity.current = { active, levelRef };
+  const activity = useRef({ active, levelRef, expanded });
+  activity.current = { active, levelRef, expanded };
 
   useEffect(() => {
     const element = canvas.current;
@@ -28,6 +30,8 @@ export function VoiceParticles({
     let width = 0;
     let height = 0;
     let seed = 71;
+    let spread = 0;
+    let origin = { x: 0, y: 0, scale: 1 };
     const pointer = { x: 0, y: 0, targetX: 0, targetY: 0, inside: false };
     const random = () => {
       seed = (seed * 16807) % 2147483647;
@@ -41,6 +45,8 @@ export function VoiceParticles({
       const ring = Math.sqrt(1 - y * y);
       const theta = index * goldenAngle;
       return {
+        edge: index / count,
+        lane: random(),
         x: Math.cos(theta) * ring,
         y,
         z: Math.sin(theta) * ring,
@@ -66,6 +72,13 @@ export function VoiceParticles({
       const dt = previous ? Math.min((now - previous) / 1000, 0.04) : 0;
       previous = now;
       const stationary = reduced.matches;
+      const expanded = activity.current.expanded;
+      spread = stationary
+        ? expanded
+          ? 1
+          : 0
+        : Math.min(1, Math.max(0, spread + ((expanded ? 1 : -1) * dt) / 1.25));
+      const morph = spread * spread * (3 - 2 * spread);
       const blend = 1 - Math.exp(-dt * 6);
       const levels = activity.current.levelRef?.current;
       const target = activity.current.active
@@ -82,7 +95,7 @@ export function VoiceParticles({
       const energy = stationary ? 0 : amplitude;
       const proximity = stationary ? 0 : hover;
       const expansion = 1 + proximity * 0.08 + energy * 0.07;
-      const scale = Math.min(width, height) / 280;
+      const scale = expanded ? origin.scale : Math.min(width, height) / 280;
       const rotation = t * 0.115;
       const cos = Math.cos(rotation);
       const sin = Math.sin(rotation);
@@ -126,7 +139,7 @@ export function VoiceParticles({
             Math.cos(y * 5.2 - z * 2.8 - t * 0.21) +
             Math.sin(z * 5.8 + x * 2 - t * 0.18) * 0.7;
           const coverage = Math.max(0, Math.min(1, (erosion + 0.62) * 1.8));
-          if (coverage < 0.025) continue;
+          if (coverage < 0.025 && morph === 0) continue;
           const ridgeField = Math.sin(
             y * 8 + z * 4.2 + Math.sin(x * 4 + t * 0.2) * 1.8 - t * 0.33,
           );
@@ -141,12 +154,60 @@ export function VoiceParticles({
             (depth < 0 ? 0.34 : 1);
           const size =
             particle.size * (0.5 + front * 0.45 + ridge * 1.2) * scale;
+          // One continuous rounded perimeter; the same cloud particles travel outwards.
+          const inset =
+            5 +
+            particle.lane * (14 + energy * 14) +
+            Math.sin(particle.edge * 36 + t * 1.4) * 2;
+          const corner = 22;
+          const horizontal = Math.max(0, width - 2 * (inset + corner));
+          const vertical = Math.max(0, height - 2 * (inset + corner));
+          const arc = (Math.PI * corner) / 2;
+          const lengths = [
+            horizontal,
+            arc,
+            vertical,
+            arc,
+            horizontal,
+            arc,
+            vertical,
+            arc,
+          ];
+          let distance =
+            ((particle.edge + t * 0.008) % 1) *
+            (2 * (horizontal + vertical) + 4 * arc);
+          let side = 0;
+          while (side < 7 && distance > lengths[side])
+            distance -= lengths[side++];
+          let edgeX = inset + corner;
+          let edgeY = inset;
+          if (side === 0) edgeX += distance;
+          else if (side === 2) {
+            edgeX = width - inset;
+            edgeY = inset + corner + distance;
+          } else if (side === 4) {
+            edgeX = width - inset - corner - distance;
+            edgeY = height - inset;
+          } else if (side === 6) {
+            edgeX = inset;
+            edgeY = height - inset - corner - distance;
+          } else {
+            const angle = ((side - 3) * Math.PI) / 4 + distance / corner;
+            const cx = side < 4 ? width - inset - corner : inset + corner;
+            const cy =
+              side > 1 && side < 6 ? height - inset - corner : inset + corner;
+            edgeX = cx + Math.cos(angle) * corner;
+            edgeY = cy + Math.sin(angle) * corner;
+          }
+          const sphereX = (expanded ? origin.x : width / 2) + px * scale;
+          const sphereY = (expanded ? origin.y : height / 2) + py * scale;
+          const bandOpacity = 0.24 + particle.weight * 0.38 + energy * 0.2;
           context.beginPath();
-          context.fillStyle = `rgba(${Math.round(3 + ridge * 21)}, ${Math.round(94 + ridge * 49)}, 224, ${Math.min(0.94, opacity)})`;
+          context.fillStyle = `rgba(${Math.round(3 + ridge * 21)}, ${Math.round(94 + ridge * 49)}, 224, ${Math.min(0.94, opacity * (1 - morph) + bandOpacity * morph)})`;
           context.arc(
-            width / 2 + px * scale,
-            height / 2 + py * scale,
-            size,
+            sphereX + (edgeX - sphereX) * morph,
+            sphereY + (edgeY - sphereY) * morph,
+            size * (1 - morph) + particle.size * (0.8 + energy * 0.5) * morph,
             0,
             Math.PI * 2,
           );
@@ -160,6 +221,14 @@ export function VoiceParticles({
     };
     const resize = () => {
       const bounds = element.getBoundingClientRect();
+      if (!activity.current.expanded) {
+        origin = {
+          x: bounds.left + bounds.width / 2,
+          y: bounds.top + bounds.height / 2,
+          scale: Math.min(bounds.width, bounds.height) / 280,
+        };
+        spread = 0;
+      }
       width = bounds.width;
       height = bounds.height;
       const ratio = Math.min(window.devicePixelRatio || 1, 2);

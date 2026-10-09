@@ -11,7 +11,12 @@ import {
 const boundary = JSON.parse(
   readFileSync('data/navigation/seongdong.geojson', 'utf8'),
 );
-export async function setup(page: Page, configured = true, voice = true) {
+export async function setup(
+  page: Page,
+  configured = true,
+  voice = true,
+  demoStart: typeof start | null = null,
+) {
   // Deterministic local test: don't request public map tiles during automation.
   await page.route('https://tile.openstreetmap.org/**', (route) =>
     route.fulfill({
@@ -29,6 +34,7 @@ export async function setup(page: Page, configured = true, voice = true) {
         dataDate: '2022-12-15',
         crosswalkCount: 987,
         keyConfigured: configured,
+        demoStart,
         policy: {
           version: 'test-v1',
           weights: { audibleSignal: 300, curbRamp: 150, tactilePaving: 100 },

@@ -34,6 +34,12 @@ ENDPOINT_MARGIN_M = 3.0
 DATA_ROOT = Path(__file__).resolve().parents[3] / "data" / "navigation"
 
 
+def demo_start():
+    if os.getenv("NAV_DEMO_MODE", "").strip().lower() not in {"1", "true"}:
+        return None
+    return {"name": "왕십리역 (시연 위치)", "lat": 37.56120587, "lon": 127.03701584}
+
+
 class NavigationError(Exception):
     def __init__(self, code, message, status=502):
         self.code, self.message, self.status = code, message, status
@@ -509,6 +515,7 @@ class NavigationService:
             "dataDate": ", ".join(dates),
             "crosswalkCount": len(facilities),
             "keyConfigured": self.client.key_configured,
+            "demoStart": demo_start(),
             "audit": audit,
             "policy": {
                 "version": POLICY_VERSION,
@@ -560,10 +567,12 @@ class NavigationService:
     async def routes(self, request):
         boundary, facilities, _ = self.load()
         start, end = request.start, request.end
-        for place in (start, end):
+        for label, place in (("출발지", start), ("도착지", end)):
             if not in_boundary([place.lon, place.lat], boundary):
                 raise NavigationError(
-                    "outside_service_area", "출발지와 도착지를 성동구 안에서 선택해 주세요.", 422
+                    "outside_service_area",
+                    f"{label}가 성동구 밖에 있어 경로를 찾을 수 없어요. 성동구 안의 {label}를 말해 주세요.",
+                    422,
                 )
         if distance([start.lon, start.lat], [end.lon, end.lat]) < 1:
             raise NavigationError(
@@ -640,6 +649,14 @@ def install_navigation(app, data_root=None, client=None):
             raise HTTPException(422, {"code": "empty_query", "message": "검색어를 입력해 주세요."})
         try:
             return await service.search(q.strip())
+        except NavigationError as error:
+            raise HTTPException(error.status, error.detail()) from None
+
+    @app.post("/api/navigation/validate-location")
+    async def validate_location(point: Place):
+        try:
+            boundary, _, _ = service.load()
+            return {"inServiceArea": in_boundary([point.lon, point.lat], boundary)}
         except NavigationError as error:
             raise HTTPException(error.status, error.detail()) from None
 

@@ -47,11 +47,31 @@ test('real canine inference follows synthetic route, final transition is retaine
   await expect(
     page.getByRole('button', { name: '동행 계속', exact: true }),
   ).toBeVisible();
+  await expect(page.getByTestId('navigation-panel')).toHaveClass(
+    /is-immersive/,
+  );
+  await page.screenshot({
+    path: 'artifacts/navigation-live/immersive-replay.png',
+  });
+  await expect(page.getByLabel('공개 개 행동 기록')).not.toBeVisible();
   const time = await page.getByTestId('companion-time').textContent();
   const frozenPoints = await trace.getAttribute('points');
   await page.waitForTimeout(500);
   await expect(page.getByTestId('companion-time')).toHaveText(time!);
   await expect(trace).toHaveAttribute('points', frozenPoints!);
+  await page.setViewportSize({ width: 320, height: 900 });
+  await expect
+    .poll(() =>
+      page
+        .locator('.demo-telemetry')
+        .evaluate((el) => el.scrollHeight <= el.clientHeight + 1),
+    )
+    .toBe(true);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await page.screenshot({
+    path: 'artifacts/navigation-live/immersive-replay-320.png',
+  });
+  await page.setViewportSize({ width: 1280, height: 1000 });
   await page.getByRole('button', { name: '동행 계속', exact: true }).click();
   await expect(page.getByTestId('companion-predicted')).toHaveText('앉기', {
     timeout: 35000,
@@ -62,6 +82,7 @@ test('real canine inference follows synthetic route, final transition is retaine
     page.getByText('재생 완료 · 마지막 분석까지 반영했어요.'),
   ).toBeVisible();
   await expect(page.locator('.companion-map-event')).toHaveCount(1);
+  await page.getByRole('button', { name: '전체 화면 나가기' }).click();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: '기록 저장', exact: true }).click();
   const download = await downloadPromise;
@@ -92,7 +113,7 @@ test('real canine inference follows synthetic route, final transition is retaine
   expect(errors).toEqual([]);
 });
 
-test('real model mismatch stays visible and restart clears observations', async ({
+test('real model mismatch stays visible and exiting during restart stays outside fullscreen', async ({
   page,
 }) => {
   test.skip(!ready, 'Trusted canine model/replay assets required');
@@ -112,6 +133,15 @@ test('real model mismatch stays visible and restart clears observations', async 
   );
   await expect(page.getByText('분류 불일치', { exact: true })).toBeVisible();
   await expect(page.getByTestId('companion-changes')).toHaveText('0');
+  // Exercise a delayed restart acknowledgement after the user has exited.
+  await page.evaluate(() => {
+    const send = WebSocket.prototype.send;
+    WebSocket.prototype.send = function (data) {
+      if (typeof data === 'string' && JSON.parse(data).action === 'restart') {
+        window.setTimeout(() => send.call(this, data), 400);
+      } else send.call(this, data);
+    };
+  });
   await page
     .getByRole('button', { name: '동행 처음부터', exact: true })
     .click();
@@ -119,6 +149,13 @@ test('real model mismatch stays visible and restart clears observations', async 
   await expect(
     page.getByTestId('companion-motion').locator('.trace.accelerometer'),
   ).toHaveAttribute('points', '');
+  await page.getByRole('button', { name: '전체 화면 나가기' }).click();
+  await expect(
+    page.getByRole('button', { name: '동행 일시정지', exact: true }),
+  ).toBeEnabled();
+  await expect(page.getByTestId('navigation-panel')).not.toHaveClass(
+    /is-immersive/,
+  );
   await page
     .getByRole('button', {
       name: '행동 연결 켜짐 · 경로만 보기로 전환',

@@ -10,10 +10,17 @@ function frameRoute(
   bounds: L.LatLngBounds,
   animate = false,
   bottom = 270,
+  bottomFraction = 0,
 ) {
   map.fitBounds(bounds, {
     paddingTopLeft: [32, 110],
-    paddingBottomRight: [32, Math.min(bottom, map.getSize().y - 190)],
+    paddingBottomRight: [
+      32,
+      Math.min(
+        Math.max(bottom, map.getSize().y * bottomFraction + 30),
+        map.getSize().y - 190,
+      ),
+    ],
     maxZoom: 17,
     animate:
       animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -30,6 +37,7 @@ export function NavigationMap({
   position,
   companionEvents = NO_EVENTS,
   previewPadding = 270,
+  bottomFraction = 0,
   onPick,
 }: {
   metadata: Metadata | null;
@@ -40,6 +48,7 @@ export function NavigationMap({
   position: Coordinate | null;
   companionEvents?: JourneyObservation[];
   previewPadding?: number;
+  bottomFraction?: number;
   onPick?: (point: Point) => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
@@ -47,6 +56,8 @@ export function NavigationMap({
   const routeBounds = useRef<L.LatLngBounds | null>(null);
   const paddingRef = useRef(previewPadding);
   paddingRef.current = previewPadding;
+  const bottomFractionRef = useRef(bottomFraction);
+  bottomFractionRef.current = bottomFraction;
   const onPickRef = useRef(onPick);
   onPickRef.current = onPick;
   const movingMarker = useRef<L.CircleMarker | null>(null);
@@ -56,6 +67,9 @@ export function NavigationMap({
     const instance = L.map(container.current, {
       scrollWheelZoom: true,
       zoomControl: false,
+      // Voice endpoint changes remove the map; avoid a deferred zoom callback
+      // accessing Leaflet panes after teardown. Pan and page motion remain.
+      zoomAnimation: false,
     }).setView([37.551, 127.039], 14);
     map.current = instance;
     L.control.zoom({ position: 'topright' }).addTo(instance);
@@ -78,7 +92,13 @@ export function NavigationMap({
     const observer = new ResizeObserver(() => {
       instance.invalidateSize();
       if (routeBounds.current)
-        frameRoute(instance, routeBounds.current, false, paddingRef.current);
+        frameRoute(
+          instance,
+          routeBounds.current,
+          false,
+          paddingRef.current,
+          bottomFractionRef.current,
+        );
     });
     observer.observe(container.current);
     return () => {
@@ -191,7 +211,13 @@ export function NavigationMap({
       routeBounds.current = L.latLngBounds(
         selected.geometry.map(([lon, lat]) => [lat, lon]),
       );
-      frameRoute(map.current, routeBounds.current, true, paddingRef.current);
+      frameRoute(
+        map.current,
+        routeBounds.current,
+        true,
+        paddingRef.current,
+        bottomFractionRef.current,
+      );
     } else {
       routeBounds.current = null;
     }
@@ -202,8 +228,14 @@ export function NavigationMap({
   }, [candidates, selectedId]);
   useEffect(() => {
     if (map.current && routeBounds.current)
-      frameRoute(map.current, routeBounds.current, false, previewPadding);
-  }, [previewPadding]);
+      frameRoute(
+        map.current,
+        routeBounds.current,
+        false,
+        previewPadding,
+        bottomFraction,
+      );
+  }, [previewPadding, bottomFraction]);
   useEffect(() => {
     if (!map.current) return;
     const group = L.layerGroup().addTo(map.current);

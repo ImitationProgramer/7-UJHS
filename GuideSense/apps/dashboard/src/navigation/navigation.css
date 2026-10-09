@@ -1488,16 +1488,25 @@ body:has(.navigation) {
   height: 38px;
   margin-top: 10px;
 }
-.voice-transcripts {
+.voice-transcripts,
+.voice-place-details {
   margin-top: 12px;
   font-size: 12px;
   line-height: 1.6;
 }
-.voice-transcripts summary {
+.voice-transcripts summary,
+.voice-place-details summary {
   cursor: pointer;
   min-height: 44px;
   display: flex;
   align-items: center;
+}
+.voice-place-details summary:hover {
+  color: var(--primary);
+}
+.voice-place-details summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
 }
 .voice-transcripts ol {
   padding-left: 18px;
@@ -1512,22 +1521,13 @@ body:has(.navigation) {
   margin-top: 14px;
   font-size: 12px;
 }
-.voice-candidates ul {
-  list-style: none;
-  padding: 0;
+.voice-candidates ol {
+  padding-left: 24px;
   margin: 8px 0 0;
 }
-.navigation .voice-candidates button {
-  width: 100%;
-  text-align: left;
-  background: var(--background);
-  color: var(--ink);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  min-height: 44px;
-  cursor: pointer;
-  margin-top: 6px;
+.voice-candidates li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
 }
 .voice-candidates span,
 .voice-candidates small {

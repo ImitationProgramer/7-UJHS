@@ -30,6 +30,7 @@ import {
 import './navigation.css';
 import './demo-dashboard.css';
 import './voice-stage.css';
+import './immersive-stage.css';
 
 const EMPTY_CANDIDATES: Candidate[] = [];
 const formatDistance = (meters: number) =>
@@ -51,11 +52,18 @@ export function NavigationPanel({ address }: { address: string }) {
   const [journeyContext, setJourneyContext] = useState<JourneyContext | null>(
     null,
   );
+  const [routeContext, setRouteContext] = useState<JourneyContext | null>(null);
   const [routes, setRoutes] = useState<Routes | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [playing, setPlaying] = useState(false);
+  const [immersive, setImmersive] = useState(false);
+  const immersiveDismissed = useRef(false);
+  function leaveImmersive() {
+    immersiveDismissed.current = true;
+    setImmersive(false);
+  }
   const [previewMeters, setMeters] = useState(0);
   const [companionEnabled, setCompanionEnabled] = useState(true);
   const [companionSource, setCompanionSource] = useState<'live' | 'replay'>(
@@ -67,6 +75,9 @@ export function NavigationPanel({ address }: { address: string }) {
   const request = useRef<AbortController | null>(null);
   const generation = useRef(0);
   function clearRoutes() {
+    immersiveDismissed.current = false;
+    setImmersive(false);
+    setRouteContext(null);
     setJourneyContext(null);
     setCompanionFrame(null);
     generation.current++;
@@ -127,6 +138,28 @@ export function NavigationPanel({ address }: { address: string }) {
     ? (companionFrame?.progress ?? 0) * total
     : previewMeters;
   const eligible = selected?.decision === 'eligible';
+  const movementRunning =
+    eligible && (replayActive ? companionFrame?.state === 'PLAYING' : playing);
+  useEffect(() => {
+    if (movementRunning && !immersiveDismissed.current) setImmersive(true);
+  }, [movementRunning]);
+  useEffect(() => {
+    if (!immersive) return;
+    const previous = document.body.style.overflow;
+    const previousFocus = document.activeElement;
+    document.body.style.overflow = 'hidden';
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') leaveImmersive();
+    };
+    window.addEventListener('keydown', escape);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener('keydown', escape);
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+        previousFocus.focus({ preventScroll: true });
+      }
+    };
+  }, [immersive]);
   const position =
     selected && eligible
       ? interpolate(selected.geometry, distances, meters)
@@ -178,6 +211,11 @@ export function NavigationPanel({ address }: { address: string }) {
     const abort = new AbortController();
     request.current = abort;
     setPending(true);
+    let timedOut = false;
+    const timeout = setTimeout(() => {
+      timedOut = true;
+      abort.abort();
+    }, 25_000);
     try {
       const result = RoutesSchema.parse(
         await readResponse(
@@ -189,13 +227,34 @@ export function NavigationPanel({ address }: { address: string }) {
           }),
         ),
       );
-      if (run !== generation.current) return;
+      if (run !== generation.current || abort.signal.aborted) return;
       setRoutes(result);
       setSelectedId(result.recommendedId ?? result.candidates[0]?.id ?? null);
+      const recommended = result.candidates.find(
+        (candidate) => candidate.id === result.recommendedId,
+      );
+      const detail = recommended
+        ? `시설 데이터 기준 추천 경로는 ${formatDistance(recommended.distanceM)}, 약 ${formatDuration(recommended.durationS)}입니다. ${recommended.reason}`
+        : result.status === 'no_candidates'
+          ? '조회된 경로가 없습니다. 잠시 후 다시 요청하거나 다른 출발지 또는 목적지를 말해 주세요.'
+          : '후보는 조회했지만 시설 조건을 확인한 추천 경로가 없습니다. 다른 출발지 또는 목적지를 말해 주세요.';
+      setRouteContext({
+        id: `route-${run}-result`,
+        text: `${start.name}에서 ${end.name}까지 경로 조회가 끝났습니다. ${detail} 실제 이동이나 도착을 감지한 결과는 아닙니다.`,
+      });
     } catch (cause) {
-      if (run === generation.current && !abort.signal.aborted)
-        setError(errorText(cause));
+      if (run === generation.current && (!abort.signal.aborted || timedOut)) {
+        const message = timedOut
+          ? '경로 조회 시간이 초과됐어요. 잠시 후 목적지를 다시 말해 주세요.'
+          : errorText(cause);
+        setError(message);
+        setRouteContext({
+          id: `route-${run}-error`,
+          text: `경로 조회 실패: ${message} 출발지는 ${start.name}, 도착지는 ${end.name}입니다. 목적지를 임의로 변경하지 마세요.`,
+        });
+      }
     } finally {
+      clearTimeout(timeout);
       if (run === generation.current) setPending(false);
     }
   }
@@ -206,8 +265,11 @@ export function NavigationPanel({ address }: { address: string }) {
       previous.lat === point.lat &&
       previous.lon === point.lon &&
       previous.name === point.name
-    )
+    ) {
+      // Reconfirming the same place is also a voice-only retry after failure.
+      if (error && !pending && start && end) void findRoutes();
       return;
+    }
     choose(which, point);
     voiceRouteIntent.current = true;
   }
@@ -220,6 +282,10 @@ export function NavigationPanel({ address }: { address: string }) {
       Math.abs(start.lon - end.lon) < 0.000001
     ) {
       setError('출발지와 도착지를 서로 다른 위치로 지정해 주세요.');
+      setRouteContext({
+        id: `route-${generation.current}-same`,
+        text: '출발지와 도착지가 같아서 경로를 조회하지 않았습니다. 다른 출발지나 목적지를 말해 주세요.',
+      });
       return;
     }
     void findRoutes();
@@ -238,13 +304,18 @@ export function NavigationPanel({ address }: { address: string }) {
   };
   return (
     <main
-      className={`navigation demo-dashboard voice-stage ${routes ? 'has-journey' : 'is-awaiting'}`}
+      className={`navigation demo-dashboard voice-stage ${routes ? 'has-journey' : 'is-awaiting'} ${immersive ? 'is-immersive' : ''}`}
       data-testid="navigation-panel"
       aria-label="성동구 시설 기반 길찾기"
     >
       <a className="navigation-skip" href="#route-planner">
         경로 검색으로 이동
       </a>
+      {immersive && (
+        <button className="navigation-exit-immersive" onClick={leaveImmersive}>
+          <RouteIcon name="close" /> 전체 화면 나가기
+        </button>
+      )}
       <header className="navigation-header">
         <a
           className="navigation-brand"
@@ -275,11 +346,14 @@ export function NavigationPanel({ address }: { address: string }) {
         >
           <div className="navigation-planner">
             <VoicePlanner
+              immersive={immersive}
               address={address}
+              locationReady={metadata !== null}
+              demoStart={metadata?.demoStart ?? null}
               start={start}
               end={end}
               onSelect={chooseFromVoice}
-              journeyContext={journeyContext ?? undefined}
+              journeyContext={journeyContext ?? routeContext ?? undefined}
             />
             <div className="navigation-service-state" role="status">
               {!metadata && !metadataError && (
@@ -354,6 +428,7 @@ export function NavigationPanel({ address }: { address: string }) {
                 position={position}
                 companionEvents={companionFrame?.observations}
                 previewPadding={40}
+                bottomFraction={immersive ? 1 / 3 : 0}
               />
               <div className="navigation-map-location">
                 <span>지금 살펴보는 지역</span>
@@ -410,7 +485,10 @@ export function NavigationPanel({ address }: { address: string }) {
                         <button
                           className="navigation-play"
                           disabled={!eligible || total <= 0 || meters >= total}
-                          onClick={() => setPlaying(true)}
+                          onClick={() => {
+                            immersiveDismissed.current = false;
+                            setPlaying(true);
+                          }}
                         >
                           <RouteIcon name="play" />
                           {meters > 0 ? '계속' : '이동 시작'}
@@ -671,7 +749,7 @@ export function NavigationPanel({ address }: { address: string }) {
               </select>
             </div>
             {companionSource === 'live' ? (
-              <LiveCompanion address={address} />
+              <LiveCompanion address={address} immersive={immersive} />
             ) : eligible && selected ? (
               <>
                 <button
@@ -691,6 +769,10 @@ export function NavigationPanel({ address }: { address: string }) {
                 </button>
                 {companionEnabled && (
                   <CompanionJourney
+                    immersive={immersive}
+                    onStart={() => {
+                      immersiveDismissed.current = false;
+                    }}
                     key={`${routes?.requestId}:${selected.id}`}
                     address={address}
                     candidate={selected}

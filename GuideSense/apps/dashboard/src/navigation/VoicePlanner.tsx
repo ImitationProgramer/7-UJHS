@@ -10,7 +10,10 @@ import { createAudioLevels } from './audioLevels';
 import { createVoiceTools, type VoiceTarget } from './voiceTools';
 
 type Props = {
+  immersive?: boolean;
   address: string;
+  locationReady: boolean;
+  demoStart: Point | null;
   journeyContext?: { id: string; text: string };
   start: Point | null;
   end: Point | null;
@@ -31,12 +34,15 @@ type Session = {
   speechActive: boolean;
   handlingTools: boolean;
   pendingContext?: { id: string; text: string };
-  lastContextId?: string;
+  spokenContextIds: Set<string>;
 };
 type Transcript = { id: string; speaker: string; text: string };
 
 export function VoicePlanner({
+  immersive = false,
   address,
+  locationReady,
+  demoStart,
   start,
   end,
   onSelect,
@@ -45,9 +51,7 @@ export function VoicePlanner({
   const [state, setState] = useState<'idle' | 'connecting' | 'listening'>(
     'idle',
   );
-  const [status, setStatus] = useState(
-    '목적지만 말해 보세요. 출발지는 현재 위치를 사용합니다.',
-  );
+  const [status, setStatus] = useState('마이크를 누르고 목적지만 말해 보세요.');
   const [error, setError] = useState('');
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
   const [candidates, setCandidates] = useState<Record<VoiceTarget, Place[]>>({
@@ -128,11 +132,10 @@ export function VoicePlanner({
   useEffect(() => {
     const active = session.current;
     if (!active) return;
-    if (!journeyContext) {
+    if (!journeyContext || active.spokenContextIds.has(journeyContext.id)) {
       active.pendingContext = undefined;
       return;
     }
-    if (active.lastContextId === journeyContext.id) return;
     active.pendingContext = journeyContext;
     flushContext(active);
   }, [journeyContext]);
@@ -154,7 +157,7 @@ export function VoicePlanner({
       return;
     const context = active.pendingContext;
     active.pendingContext = undefined;
-    active.lastContextId = context.id;
+    active.spokenContextIds.add(context.id);
     send(active, {
       type: 'conversation.item.create',
       item: {
@@ -163,7 +166,7 @@ export function VoicePlanner({
         content: [
           {
             type: 'input_text',
-            text: `앱의 경로 상황 데이터: ${context.text}\n확인된 변화만 한두 문장으로 안내해 주세요. 공개 Replay의 위치 연결은 시뮬레이션입니다.`,
+            text: `앱의 경로 상황 데이터: ${context.text}\n이 결과를 지금 음성으로 안내해 주세요. 오류이면 원인과 다음에 말할 내용을 설명하고 답을 기다리세요. 조회가 끝났으면 더 기다리라고 하지 마세요. 실제 도착이나 실시간 GPS 안내로 표현하지 마세요.`,
           },
         ],
       },
@@ -258,6 +261,21 @@ export function VoicePlanner({
           output: JSON.stringify(output),
         },
       });
+      if (
+        call.name === 'end_session' &&
+        typeof output === 'object' &&
+        output !== null &&
+        'ended' in output &&
+        output.ended === true
+      ) {
+        addTranscript(
+          `end-${call.call_id}`,
+          'GuideSense',
+          '음성 대화를 종료했어요.',
+        );
+        stop();
+        return;
+      }
       handled = true;
     }
     active.handlingTools = false;
@@ -292,17 +310,21 @@ export function VoicePlanner({
       responseActive: false,
       speechActive: false,
       handlingTools: false,
+      spokenContextIds: new Set(),
       pendingContext: journeyContext,
       tools: createVoiceTools({
         address,
         signal: controller.signal,
+        demoStart,
         onCandidates: (target, places) => {
           if (session.current === active)
             setCandidates((old) => ({ ...old, [target]: places }));
         },
         onSelect: (target, point) => {
-          if (session.current === active)
+          if (session.current === active) {
+            if (target === 'start') setError('');
             current.current.onSelect(target, point);
+          }
         },
       }),
     };
@@ -378,15 +400,26 @@ export function VoicePlanner({
           '서버에 OpenAI API 키가 아직 설정되지 않았어요. 설정 후 다시 시도해 주세요.',
         );
       if (!current.current.start) {
-        setStatus('현재 위치를 확인하고 있어요…');
+        setStatus(
+          demoStart
+            ? '시연 출발지를 준비하고 있어요…'
+            : '현재 위치를 확인하고 있어요…',
+        );
         const result = (await active.tools.execute(
           'get_current_location',
           '{}',
-        )) as { selected?: boolean; message?: string };
+        )) as {
+          selected?: boolean;
+          message?: string;
+          source?: string;
+          name?: string;
+        };
         if (session.current !== active) return;
         locationStatus = result.selected
-          ? '브라우저 현재 위치를 출발지로 설정했습니다.'
-          : `현재 위치 확인 실패: ${result.message ?? '출발할 장소도 말해 주세요.'} 반복 요청하지 말고 출발지를 물어보세요.`;
+          ? result.source === 'demo_location'
+            ? `시연 모드: ${result.name}을 가상 출발지로 설정했습니다. 실제 GPS 위치가 아닙니다. 첫 응답에서 시연 출발지를 짧게 알려주고 목적지를 물어보세요.`
+            : '브라우저 현재 위치를 출발지로 설정했습니다.'
+          : `현재 위치 확인 실패: ${result.message ?? '출발할 장소도 말해 주세요.'} 첫 응답에서 이 실패 원인을 먼저 소리 내어 설명한 뒤 출발지를 물어보세요. 현재 위치를 반복 요청하지 마세요.`;
         if (!result.selected)
           setError(
             result.message ??
@@ -430,29 +463,6 @@ export function VoicePlanner({
     }
   }
 
-  function selectCandidate(target: VoiceTarget, place: Place) {
-    const active = session.current;
-    if (!active) return;
-    const result = active.tools.select(target, place.id);
-    if (!('selected' in result)) return;
-    send(active, {
-      type: 'conversation.item.create',
-      item: {
-        type: 'message',
-        role: 'user',
-        content: [
-          {
-            type: 'input_text',
-            text: `화면에서 ${target === 'start' ? '출발지' : '도착지'}를 ${place.name} (${place.address}, place_id=${place.id})로 직접 선택해 적용했습니다. 이 선택을 반영해 주세요.`,
-          },
-        ],
-      },
-    });
-    setStatus(
-      `${target === 'start' ? '출발지' : '도착지'}를 ${place.name}으로 설정했어요.`,
-    );
-  }
-
   return (
     <section
       className={`voice-planner voice-state-${state}`}
@@ -460,12 +470,17 @@ export function VoicePlanner({
     >
       <div className="voice-planner-heading">
         <div className="voice-cloud-control">
-          <VoiceParticles active={state !== 'idle'} levelRef={levelRef} />
+          <VoiceParticles
+            active={state !== 'idle'}
+            levelRef={levelRef}
+            expanded={immersive}
+          />
           <button
             type="button"
             className="voice-toggle"
             aria-label={state === 'idle' ? '음성으로 입력' : '음성 종료'}
             aria-pressed={state !== 'idle'}
+            disabled={state === 'idle' && !locationReady}
             onClick={() => (state === 'idle' ? void connect() : stop())}
           >
             <svg
@@ -501,8 +516,11 @@ export function VoicePlanner({
         {status}
       </p>
       <p className="voice-disclosure">
-        AI 음성으로 대화합니다. 시작하면 위치 권한을 요청하고 음성이 OpenAI로
-        전송됩니다. 경로 안내 중에도 연결되며 최대 15분입니다.
+        {demoStart
+          ? `시연 모드 · 가상 기본 출발지: ${demoStart.name}. 실제 위치는 사용하지 않습니다. `
+          : '시작하면 현재 위치 권한을 요청합니다. '}
+        AI 음성으로 대화하며 음성이 OpenAI로 전송됩니다. 경로 안내 중에도
+        연결되며 최대 15분입니다.
       </p>
       {error && (
         <p className="voice-error" role="alert">
@@ -512,7 +530,7 @@ export function VoicePlanner({
       <audio
         ref={audio}
         autoPlay
-        controls={state === 'listening'}
+        controls={state === 'listening' && !immersive}
         aria-label="AI 음성 재생"
         hidden={state !== 'listening'}
       />
@@ -528,31 +546,28 @@ export function VoicePlanner({
           </ol>
         </details>
       )}
-      {(['start', 'end'] as const).map(
-        (target) =>
-          candidates[target].length > 0 && (
-            <div className="voice-candidates" key={target}>
-              <strong>
-                {target === 'start' ? '출발지' : '도착지'} 후보 · 말하거나
-                눌러서 선택
-              </strong>
-              <ul>
-                {candidates[target].map((place, index) => (
-                  <li key={place.id}>
-                    <button
-                      type="button"
-                      onClick={() => selectCandidate(target, place)}
-                    >
-                      <span>
-                        {index + 1}. {place.name}
-                      </span>
-                      <small>{place.address}</small>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ),
+      {(candidates.start.length > 0 || candidates.end.length > 0) && (
+        <details className="voice-place-details">
+          <summary>장소 상세 보기</summary>
+          {(['start', 'end'] as const).map(
+            (target) =>
+              candidates[target].length > 0 && (
+                <div className="voice-candidates" key={target}>
+                  <strong>
+                    {target === 'start' ? '출발지' : '도착지'} 후보
+                  </strong>
+                  <ol>
+                    {candidates[target].map((place) => (
+                      <li key={place.id}>
+                        <span>{place.name}</span>
+                        <small>{place.address}</small>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ),
+          )}
+        </details>
       )}
     </section>
   );

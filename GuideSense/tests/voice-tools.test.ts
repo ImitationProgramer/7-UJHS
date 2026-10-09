@@ -8,13 +8,14 @@ const place = {
   lon: 127.03,
   inServiceArea: true,
 };
-function setup() {
+function setup(demoStart?: { name: string; lat: number; lon: number }) {
   const controller = new AbortController();
   const onSelect = vi.fn();
   const onCandidates = vi.fn();
   const tools = createVoiceTools({
     address: 'http://localhost:8000',
     signal: controller.signal,
+    demoStart,
     onSelect,
     onCandidates,
   });
@@ -22,6 +23,49 @@ function setup() {
 }
 afterEach(() => vi.unstubAllGlobals());
 describe('voice place selection boundary', () => {
+  it('numbers only eligible candidates in the same order presented to the user', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            places: [
+              { ...place, id: 'outside', inServiceArea: false },
+              place,
+              { ...place, id: 'second', name: '왕십리역 2번 출구' },
+            ],
+          }),
+        ),
+      ),
+    );
+    const { tools, onSelect, onCandidates } = setup();
+    const result = await tools.execute(
+      'search_places',
+      JSON.stringify({ target: 'end', query: '왕십리역' }),
+    );
+    expect(result).toMatchObject({
+      places: [
+        { number: 1, place_id: 'station' },
+        { number: 2, place_id: 'second' },
+      ],
+    });
+    expect(onCandidates).toHaveBeenLastCalledWith('end', [
+      place,
+      { ...place, id: 'second', name: '왕십리역 2번 출구' },
+    ]);
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+  it('accepts only an empty end-session command and rejects it after stop', async () => {
+    const { tools, controller } = setup();
+    expect(
+      await tools.execute('end_session', '{"unexpected":true}'),
+    ).toMatchObject({ error: 'invalid_arguments' });
+    expect(await tools.execute('end_session', '{}')).toEqual({ ended: true });
+    controller.abort();
+    expect(await tools.execute('end_session', '{}')).toMatchObject({
+      error: 'session_closed',
+    });
+  });
   it('only selects exact in-area results for the searched target', async () => {
     vi.stubGlobal(
       'fetch',
@@ -133,7 +177,43 @@ describe('voice place selection boundary', () => {
 });
 
 describe('current location voice tool', () => {
+  it('uses the configured demo departure without requesting real geolocation', async () => {
+    const getCurrentPosition = vi.fn();
+    vi.stubGlobal('navigator', { geolocation: { getCurrentPosition } });
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockImplementation(
+          async () => new Response(JSON.stringify({ inServiceArea: true })),
+        ),
+    );
+    const demoStart = {
+      name: '왕십리역 (시연 위치)',
+      lat: 37.56120587,
+      lon: 127.03701584,
+    };
+    const { tools, onSelect } = setup(demoStart);
+    expect(await tools.execute('get_current_location', '{}')).toMatchObject({
+      selected: true,
+      source: 'demo_location',
+      name: demoStart.name,
+    });
+    expect(getCurrentPosition).not.toHaveBeenCalled();
+    expect(onSelect).toHaveBeenCalledExactlyOnceWith('start', demoStart);
+    expect(
+      JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string),
+    ).toEqual(demoStart);
+  });
   function locationMock() {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockImplementation(
+          async () => new Response(JSON.stringify({ inServiceArea: true })),
+        ),
+    );
     let success!: PositionCallback;
     let failure!: PositionErrorCallback;
     vi.stubGlobal('navigator', {
@@ -174,6 +254,47 @@ describe('current location voice tool', () => {
       if (condition === 'changed') tools.invalidate('start');
       if (condition === 'denied') location.failure();
       else location.success(condition === 'inaccurate' ? 200 : 20);
+      expect(await pending).toHaveProperty('error');
+      expect(onSelect).not.toHaveBeenCalled();
+    },
+  );
+  it('does not select an out-of-area current location', async () => {
+    const location = locationMock();
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify({ inServiceArea: false })),
+        ),
+    );
+    const { tools, onSelect } = setup();
+    const pending = tools.execute('get_current_location', '{}');
+    location.success();
+    expect(await pending).toMatchObject({ error: 'outside_service_area' });
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+  it.each(['stopped', 'changed'])(
+    'ignores location validation after %s',
+    async (condition) => {
+      const location = locationMock();
+      let resolve!: (response: Response) => void;
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(
+          () =>
+            new Promise<Response>((done) => {
+              resolve = done;
+            }),
+        ),
+      );
+      const { tools, controller, onSelect } = setup();
+      const pending = tools.execute('get_current_location', '{}');
+      location.success();
+      await vi.waitFor(() => expect(resolve).toBeDefined());
+      if (condition === 'stopped') controller.abort();
+      else tools.invalidate('start');
+      resolve(new Response(JSON.stringify({ inServiceArea: true })));
       expect(await pending).toHaveProperty('error');
       expect(onSelect).not.toHaveBeenCalled();
     },

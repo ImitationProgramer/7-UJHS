@@ -176,6 +176,9 @@ export async function callTool(
 }
 
 export async function mockVoiceEndpoints(page: Page) {
+  await page.route('**/api/navigation/validate-location', (route) =>
+    route.fulfill({ json: { inServiceArea: true } }),
+  );
   await page.route('**/api/navigation/voice/status', (route) =>
     route.fulfill({ json: { configured: true } }),
   );

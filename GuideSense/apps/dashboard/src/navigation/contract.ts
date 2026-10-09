@@ -35,6 +35,7 @@ export const MetadataSchema = z.object({
   dataDate: z.string(),
   crosswalkCount: finite.int().nonnegative(),
   keyConfigured: z.boolean(),
+  demoStart: point.nullable().default(null),
   policy: z.object({
     version: z.string(),
     weights: z.record(z.string(), finite),

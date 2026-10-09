@@ -2,6 +2,14 @@
 
 2026-10-09, 팀 공유 파일 `GuideSense_shared_files_20261008_170231.zip`에서 기존 Goal 3 모델과 Goal 3–4 Replay만 복원했다. 모델을 다시 학습하거나 예측에 맞춰 기록을 편집하지 않았다.
 
+## 현재 작업폴더 재연결 — 2026-10-09
+
+`7-UJHS/GuideSense`의 실행 환경에 같은 공유 ZIP에서 아래 14개 파일을 다시 복원했다. 각 파일의 크기와 SHA-256을 ZIP의 `SHARE_MANIFEST.json`과 대조했으며, 모델 해시는 아래 기존 검증 기록과도 일치한다. 기존 파일을 덮어쓰지 않았고, 과거 빌드 결과·개인 iPhone 캡처·전체 원본 CSV는 복원하지 않았다.
+
+Python 3.11 가상환경에 `ml/gait[model]`의 고정 버전을 설치하고 API를 재시작했다. 세 clip의 23개 window 모두 실제 재추론이 실행되어 저장 예측과 일치했다. 실제 자료를 켠 Replay API 테스트 17개 통과. 브라우저 Replay·경로 연결·재조회·실패 복구 9개도 통과했다. 최초 라이브러리 로딩 중 3개가 시간 초과했지만, 초기화 완료 후 실패 항목을 재실행해 모두 통과했다.
+
+현재 `http://localhost:8000/api/replays`에서 세 clip 모두 `available=true`이며, `http://localhost:5173/diagnostics`에서 실제 Dog45 모델의 Walking 출력·센서 그래프·정상 정지를 확인했다. 로컬 검증 기록은 `artifacts/replay-restoration-check.json`, 화면 증거는 `artifacts/replay-restored-live.png`다. 왕십리역 시연 모드를 유지하며 데이터 복원으로 기존 시설 기반 경로 추천 조건을 바꾸지 않았다.
+
 ## 복원 범위
 
 - `artifacts/goal3/model/{model.joblib,metadata.json}`
