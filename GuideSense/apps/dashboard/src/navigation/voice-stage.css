@@ -1,0 +1,412 @@
+/* Voice → route → motion, one continuous S-curve. */
+.navigation.voice-stage {
+  --stage-ease: cubic-bezier(0.76, 0, 0.24, 1);
+  height: auto;
+  display: block;
+  background: #fff;
+  min-height: 100dvh;
+  overflow: clip;
+}
+.voice-stage .navigation-header {
+  height: 76px;
+  padding: 0 40px;
+  border: 0;
+}
+.voice-stage .navigation-brand {
+  font-size: 23px;
+}
+.voice-stage .navigation-brand svg,
+.voice-stage .navigation-brand img {
+  width: 44px;
+  height: 44px;
+}
+.voice-stage .navigation-header-label,
+.voice-stage .demo-badge,
+.voice-stage .navigation-footer {
+  display: none;
+}
+.voice-stage .navigation-info-button {
+  margin-left: auto;
+  font-size: 12px;
+}
+.voice-stage .navigation-workspace {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: auto;
+  overflow: visible;
+  max-width: 1120px;
+  width: 100%;
+  margin: auto;
+  padding: 0 32px 64px;
+  gap: 0;
+}
+.voice-stage .navigation-sidebar {
+  width: 100%;
+  min-width: 0;
+  min-height: calc(100dvh - 150px);
+  padding: 10vh 0 32px;
+  border: 0;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  transition:
+    min-height 1100ms var(--stage-ease),
+    padding 1100ms var(--stage-ease);
+}
+.voice-stage.has-journey .navigation-sidebar {
+  min-height: 260px;
+  padding: 12px 0 26px;
+}
+.voice-stage .navigation-planner {
+  width: min(100%, 510px);
+  margin: 0 auto;
+}
+.voice-stage .voice-planner {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  text-align: center;
+}
+.voice-stage .voice-planner-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.voice-stage .voice-toggle {
+  display: grid;
+  place-items: center;
+  width: 116px;
+  height: 116px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 0 0 12px #edf5ff;
+  transition:
+    transform 500ms var(--stage-ease),
+    width 1100ms var(--stage-ease),
+    height 1100ms var(--stage-ease),
+    box-shadow 500ms var(--stage-ease);
+}
+.voice-stage .voice-toggle:hover {
+  background: #005bb8;
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 18px #edf5ff;
+}
+.voice-stage .voice-toggle:active {
+  transform: scale(0.96);
+}
+.voice-stage .voice-toggle svg {
+  width: 42px;
+  height: 42px;
+}
+.voice-stage .voice-planner-heading > h1 {
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+.voice-stage .voice-state-listening .voice-toggle {
+  box-shadow:
+    0 0 0 12px #edf5ff,
+    0 0 0 23px #f6faff;
+}
+.voice-stage .voice-status {
+  font-size: 13px;
+  margin: 12px auto 0;
+  line-height: 1.65;
+}
+.voice-stage .voice-disclosure {
+  max-width: 360px;
+  font-size: 10px;
+  line-height: 1.6;
+  margin: 18px auto 0;
+  color: var(--muted);
+}
+.voice-stage .voice-planner audio {
+  max-width: 100%;
+  height: 30px;
+  margin-top: 12px;
+}
+.voice-stage .voice-transcripts,
+.voice-stage .voice-candidates {
+  text-align: left;
+  margin-top: 16px;
+}
+.voice-stage .navigation-searches {
+  margin-top: 20px;
+}
+.voice-stage .navigation-service-state {
+  text-align: center;
+}
+.voice-stage .navigation-loading {
+  text-align: center;
+  margin: 12px auto;
+  width: min(100%, 400px);
+}
+.voice-stage .navigation-loading > div {
+  height: 2px;
+}
+.voice-stage .navigation-loading p {
+  font-size: 13px;
+}
+.voice-stage.has-journey .voice-planner-heading {
+  gap: 15px;
+}
+.voice-stage.has-journey .voice-toggle {
+  width: 58px;
+  height: 58px;
+  box-shadow: 0 0 0 6px #edf5ff;
+}
+.voice-stage.has-journey .voice-toggle svg {
+  width: 25px;
+  height: 25px;
+}
+.voice-stage.has-journey .voice-planner-heading > h1 {
+  font-size: 18px;
+}
+.voice-stage.has-journey .voice-status {
+  margin-top: 6px;
+  font-size: 12px;
+}
+.voice-stage.has-journey .voice-disclosure {
+  margin-top: 8px;
+}
+.voice-stage .demo-route-column {
+  border: 0;
+  padding: 0;
+  overflow: visible;
+  min-width: 0;
+}
+.voice-stage.has-journey .demo-route-column {
+  animation: stage-arrive 1200ms var(--stage-ease) both;
+}
+.voice-stage .voice-route-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 14px;
+}
+.voice-stage .voice-route-heading p {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.voice-stage .voice-route-heading strong {
+  font-size: 24px;
+}
+.voice-stage .voice-route-heading p > span {
+  color: var(--muted);
+  font-size: 14px;
+}
+.voice-stage .navigation-map-stage {
+  height: clamp(300px, 42vh, 470px);
+  min-height: 300px;
+  border-radius: 20px;
+}
+.voice-stage .navigation-map-location {
+  display: none;
+}
+.voice-stage .navigation-simulation {
+  padding: 20px 4px;
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+}
+.voice-stage .navigation-guidance {
+  font-size: 21px;
+}
+.voice-stage .voice-route-evidence {
+  border-top: 1px solid var(--border);
+  padding: 16px 4px;
+  font-size: 12px;
+}
+.voice-stage .voice-route-evidence > summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.voice-stage .navigation-results {
+  padding-top: 20px;
+}
+.voice-stage .demo-telemetry {
+  width: 100%;
+  min-width: 0;
+  margin: 12px 0 0;
+  padding: 26px 4px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: white;
+  overflow: visible;
+  animation: stage-arrive 1200ms var(--stage-ease) 260ms both;
+}
+.voice-stage .demo-telemetry .demo-section-heading {
+  margin-bottom: 16px;
+}
+.voice-stage .demo-telemetry .demo-section-heading h2 {
+  font-size: 24px;
+}
+.voice-stage .companion-input-source {
+  max-width: 320px;
+}
+.voice-stage .live-companion .graph {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.voice-stage .live-companion .graph svg {
+  max-height: none;
+}
+.voice-stage .live-companion-meta {
+  max-width: 700px;
+}
+.voice-stage .live-analysis-boundary {
+  margin-top: 18px;
+}
+@keyframes stage-arrive {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 110px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@media (max-width: 760px) {
+  .voice-stage .navigation-header {
+    height: 66px;
+    padding: 0 20px;
+  }
+  .voice-stage .navigation-brand {
+    font-size: 20px;
+  }
+  .voice-stage .navigation-workspace {
+    padding: 0 20px 36px;
+  }
+  .voice-stage .navigation-sidebar {
+    padding-top: 6vh;
+  }
+  .voice-stage.has-journey .navigation-sidebar {
+    padding-top: 14px;
+  }
+  .voice-stage .voice-toggle {
+    width: 104px;
+    height: 104px;
+  }
+  .voice-stage .navigation-guidance {
+    font-size: 18px;
+  }
+  .voice-stage .live-companion .graph,
+  .voice-stage .navigation-candidates {
+    grid-template-columns: 1fr;
+  }
+  .voice-stage .demo-section-label {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navigation.voice-stage *,
+  .navigation.voice-stage *::before,
+  .navigation.voice-stage *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Particle cloud is the control surface; no rigid disc or animated fake waveform. */
+.voice-stage .voice-cloud-control {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 320px;
+  height: 280px;
+  max-width: 100%;
+  transition:
+    width 1100ms var(--stage-ease),
+    height 1100ms var(--stage-ease);
+}
+.voice-stage .voice-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.voice-stage .voice-toggle,
+.voice-stage .voice-toggle:hover,
+.voice-stage .voice-state-listening .voice-toggle {
+  width: 84px;
+  height: 84px;
+  color: var(--primary);
+  background: transparent;
+  box-shadow: none;
+  position: relative;
+  z-index: 1;
+}
+.voice-stage .voice-toggle:hover {
+  transform: scale(1.06);
+}
+.voice-stage .voice-planner-heading {
+  gap: 0;
+}
+.voice-stage .voice-planner-heading > h1 {
+  margin: 0;
+  font-size: 23px;
+}
+.voice-stage .voice-status {
+  margin-top: 10px;
+}
+.voice-stage.has-journey .voice-cloud-control {
+  width: 150px;
+  height: 100px;
+}
+.voice-stage.has-journey .voice-planner-heading {
+  gap: 0;
+}
+.voice-stage.has-journey .voice-toggle {
+  background: transparent;
+  box-shadow: none;
+}
+.voice-stage .live-companion .graph > h2,
+.voice-stage .live-companion .graph > p {
+  grid-column: 1 / -1;
+}
+
+/* Override the shared navigation button hover without introducing a disc. */
+.navigation.voice-stage .voice-toggle,
+.navigation.voice-stage .voice-toggle:hover,
+.navigation.voice-stage .voice-toggle:active,
+.navigation.voice-stage .voice-toggle:focus,
+.navigation.voice-stage .voice-state-listening .voice-toggle {
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+.navigation.voice-stage .voice-toggle {
+  outline: none;
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.navigation.voice-stage .voice-cloud-control:hover .voice-toggle {
+  transform: scale(1.08);
+}
+.navigation.voice-stage .voice-toggle:active {
+  transform: scale(1.02);
+}
+.navigation.voice-stage .voice-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .navigation.voice-stage .voice-cloud-control:hover .voice-toggle,
+  .navigation.voice-stage .voice-toggle:active {
+    transform: none;
+  }
+}

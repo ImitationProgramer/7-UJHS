@@ -54,7 +54,7 @@ cd GuideSense
 npm run dashboard
 ```
 
-Mac 브라우저에서 <http://localhost:5173>을 엽니다. 기본 Backend는 현재 호스트의 8000번 포트입니다. 화면의 Backend 주소 입력 후 **연결 적용**을 누르면 변경할 수 있습니다. 또는 `apps/dashboard/.env.local`에 `VITE_BACKEND_URL=http://Mac-IP:8000`을 설정한 후 재시작합니다.
+Mac 브라우저에서 <http://localhost:5173>을 열면 길찾기 전용 화면이 나타납니다. 기존 센서·Replay 진단은 <http://localhost:5173/diagnostics>에서 사용합니다. 기본 Backend는 현재 호스트의 8000번 포트입니다. 진단 화면에서는 Backend 주소 입력 후 **연결 적용**을 누르면 변경할 수 있습니다. 길찾기 화면의 서버 주소는 `apps/dashboard/.env.local`에 `VITE_BACKEND_URL=http://Mac-IP:8000`을 설정한 후 재시작합니다.
 
 ## 3. iPhone에서 Expo 실행
 
@@ -251,3 +251,21 @@ services/api/.venv/bin/python scripts/package_goal4_demo.py
 원본 2GB CSV 없이 시연하려면 신뢰하는 `guidesense-demo.zip`을 프로젝트 루트에 복원합니다. 기존 모델과 최소 추출 기록·출처·라이선스를 포함하며 iPhone/GPS 기록은 포함하지 않습니다. 모델이 없으면 기존 Goal 3 artifact를 확보해야 하며 이번 Goal에서는 재학습하지 않습니다. 바이너리와 데이터는 계속 Git 제외입니다.
 
 [Dashboard 설계](docs/goal4-dashboard-design.md) · [Replay API/추론/clip 감사/라이선스/bundle](docs/goal4-replay-integration.md) · [자동·실기기 검증과 구현 파일](docs/goal4-validation.md) · [4분 Demo 실행 시나리오](docs/demo-scenario.md).
+
+## Goal 5: 성동구 시설 기반 길찾기
+
+첫 화면의 **길찾기 전용 UI**에서 지도 또는 장소 검색으로 출발·도착지를 직접 지정합니다. TMAP 옵션별 후보를 비교하고, 실제 횡단 선형과 CSV를 연결해 신호등 없는 후보를 제외합니다. 정보가 불확실한 후보는 추천하지 않습니다. 적격 후보는 거리·음향신호기·보도턱 낮춤·점자블록 비용으로 비교합니다.
+
+`services/api/.env`에 `TMAP_APP_KEY`를 설정한 뒤 API를 시작/재시작하세요. 키가 없어도 지역 지도는 표시되며 실제 검색·경로 결과를 꾸며내지 않습니다. 경로 이동 시뮬레이션은 실제 센서 입력과 독립입니다.
+
+[실행·TMAP 연동](docs/goal5-tmap-integration.md) · [PRD](docs/goal5-navigation-prd.md) · [검증과 한계](docs/goal5-validation.md) · [데이터 출처](data/navigation/README.md)
+
+## Goal 6: 개 행동 Replay와 경로 연결
+
+길찾기 결과에서 **개 행동 데이터 연결 → 동행 재생**을 누르면 공개 개 IMU의 실제 모델 분류가 지도 미리보기와 함께 진행됩니다. 행동 분류 변화는 번호 마커와 구간 기록으로 표시하며, 완료 후 JSON으로 저장할 수 있습니다. 이는 공개 기록을 가상 경로에 대응시키는 시연이고 실제 안내견의 GPS 이력이 아닙니다. 이 가상 기록으로 경로 추천 가중치를 바꾸지 않습니다.
+
+필요한 모델/세 Replay 파일과 검증은 [복원 기록](docs/goal6-replay-restoration.md), 시간 대응·초기화·보관 정책은 [연결 문서](docs/goal6-companion-integration.md)를 참고하세요. 이번 환경에서는 팀 공유 아카이브의 최소 파일만 `artifacts/`에 복원했습니다. 모델·데이터는 기존 Git 제외 경로에 있으므로 다른 환경에서는 신뢰하는 팀 번들을 별도로 복원해야 합니다.
+
+## Goal 7: 음성으로 장소 설정
+
+길찾기의 **음성으로 입력**에서 출발지와 도착지를 말하면 OpenAI Realtime과 TMAP 장소 검색을 통해 입력할 수 있습니다. `services/api/.env`에 `OPENAI_API_KEY`를 추가하고 API 서버를 재시작하세요. 마이크는 localhost 또는 HTTPS에서 사용합니다. 설정·데이터 범위·검증은 [Realtime 음성 연결](docs/goal7-realtime-voice.md)을 참고하세요.

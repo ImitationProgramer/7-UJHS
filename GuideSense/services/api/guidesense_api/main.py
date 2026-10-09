@@ -8,9 +8,13 @@ from pathlib import Path
 import anyio
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from pydantic import ValidationError, BaseModel, ConfigDict
+from fastapi.middleware.cors import CORSMiddleware
 
 from .capture import Capture
 from .replay import install_replay
+from .navigation import install_navigation
+from .voice import install_voice
+from dotenv import load_dotenv
 
 from .models import SensorFrame, Snapshot
 
@@ -72,6 +76,7 @@ class CaptureRequest(BaseModel):
 
 
 def create_app(timeout_seconds=None, capture_root=None, replay_clips=None, model_folder=None):
+    load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
     hub = SensorHub(
         float(os.getenv("DEVICE_TIMEOUT_SECONDS", "3"))
         if timeout_seconds is None
@@ -99,8 +104,23 @@ def create_app(timeout_seconds=None, capture_root=None, replay_clips=None, model
             await task
 
     app = FastAPI(title="GuideSense sensor relay", lifespan=lifespan)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            origin.strip()
+            for origin in os.getenv(
+                "NAV_ALLOWED_ORIGINS",
+                "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174",
+            ).split(",")
+            if origin.strip()
+        ],
+        allow_methods=["GET", "POST"],
+        allow_headers=["Content-Type"],
+    )
     app.state.hub = hub
     install_replay(app, replay_clips, model_folder)
+    install_navigation(app)
+    install_voice(app)
 
     @app.post("/api/capture/start", status_code=201)
     async def capture_start(request: CaptureRequest):

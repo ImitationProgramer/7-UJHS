@@ -64,7 +64,7 @@ test('missing artifact, invalid sensor schema, actual API shutdown and recovery'
     cpSync('artifacts/goal3/replay-demo', clip, { recursive: true });
   try {
     await start();
-    await page.goto('/');
+    await page.goto('/diagnostics');
     await page.getByLabel('Backend 주소').fill('http://127.0.0.1:8002');
     await page.getByRole('button', { name: '연결 적용' }).click();
     await page

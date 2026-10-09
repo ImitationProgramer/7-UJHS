@@ -13,7 +13,7 @@ test('actual canine artifact → saved model → controls, completion and indepe
   test.setTimeout(65000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/');
+  await page.goto('/diagnostics');
   await page
     .getByRole('button', { name: 'DATASET REPLAY', exact: true })
     .click();
@@ -42,7 +42,7 @@ test('actual canine artifact → saved model → controls, completion and indepe
   });
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   const other = await context.newPage();
-  await other.goto('/');
+  await other.goto('/diagnostics');
   await other
     .getByRole('button', { name: 'DATASET REPLAY', exact: true })
     .click();
@@ -88,7 +88,7 @@ test('recorded transition clip, keyboard/native select, narrow layout', async ({
     'Transition artifact required',
   );
   test.setTimeout(45000);
-  await page.goto('/');
+  await page.goto('/diagnostics');
   const mode = page.getByRole('button', {
     name: 'DATASET REPLAY',
     exact: true,
@@ -137,7 +137,7 @@ test('real posture misclassification stays visible and brooch follows prediction
     !hasReplay || !existsSync('artifacts/goal4/replay-posture/manifest.json'),
     'Posture artifact required',
   );
-  await page.goto('/');
+  await page.goto('/diagnostics');
   await page
     .getByRole('button', { name: 'DATASET REPLAY', exact: true })
     .click();

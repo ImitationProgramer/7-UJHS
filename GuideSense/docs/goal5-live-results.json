@@ -1,0 +1,193 @@
+{
+  "date": "2026-10-09",
+  "source": "actual_tmap_api",
+  "pairs": [
+    {
+      "start": "성동구청",
+      "end": "왕십리역",
+      "status": "no_eligible_route",
+      "candidates": [
+        {
+          "id": "76eff6570042",
+          "options": [0, 4, 10, 30],
+          "decision": "unverified",
+          "distanceM": 287.0,
+          "crossingCoverage": "classified_segments",
+          "summary": {
+            "crossingCount": 1,
+            "matchedCount": 0,
+            "unknownCount": 1
+          },
+          "crossingReasons": {
+            "횡단 시설 기록을 연결하지 못했습니다.": 1
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "start": "서울숲역",
+      "end": "뚝섬역",
+      "status": "recommended",
+      "candidates": [
+        {
+          "id": "19a4568dfcaa",
+          "options": [0, 10, 30],
+          "decision": "eligible",
+          "distanceM": 618.0,
+          "crossingCoverage": "classified_segments",
+          "summary": {
+            "crossingCount": 0,
+            "matchedCount": 0,
+            "unknownCount": 0
+          },
+          "crossingReasons": {}
+        },
+        {
+          "id": "b2fb59cb8391",
+          "options": [4],
+          "decision": "eligible",
+          "distanceM": 766.0,
+          "crossingCoverage": "classified_segments",
+          "summary": {
+            "crossingCount": 0,
+            "matchedCount": 0,
+            "unknownCount": 0
+          },
+          "crossingReasons": {}
+        }
+      ],
+      "errors": []
+    },
+    {
+      "start": "뚝섬역",
+      "end": "성수역",
+      "status": "no_eligible_route",
+      "candidates": [
+        {
+          "id": "b7b162e50d5d",
+          "options": [0, 4, 10, 30],
+          "decision": "unverified",
+          "distanceM": 848.0,
+          "crossingCoverage": "classified_segments",
+          "summary": {
+            "crossingCount": 1,
+            "matchedCount": 0,
+            "unknownCount": 1
+          },
+          "crossingReasons": {
+            "횡단 시설 기록을 연결하지 못했습니다.": 1
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "start": "왕십리역",
+      "end": "한양대학교병원",
+      "status": "recommended",
+      "candidates": [
+        {
+          "id": "20f87afbf71d",
+          "options": [0],
+          "decision": "unverified",
+          "distanceM": 835.0,
+          "crossingCoverage": "incomplete",
+          "summary": {
+            "crossingCount": 1,
+            "matchedCount": 1,
+            "unknownCount": 0
+          },
+          "crossingReasons": {
+            "TMAP 횡단 선형과 단일 시설 좌표를 연결했습니다.": 1
+          }
+        },
+        {
+          "id": "f39cf2a492ac",
+          "options": [4],
+          "decision": "unverified",
+          "distanceM": 1195.0,
+          "crossingCoverage": "incomplete",
+          "summary": {
+            "crossingCount": 2,
+            "matchedCount": 1,
+            "unknownCount": 1
+          },
+          "crossingReasons": {
+            "횡단 시설 기록을 연결하지 못했습니다.": 1,
+            "TMAP 횡단 선형과 단일 시설 좌표를 연결했습니다.": 1
+          }
+        },
+        {
+          "id": "9855ffab3cd3",
+          "options": [10],
+          "decision": "unverified",
+          "distanceM": 826.0,
+          "crossingCoverage": "incomplete",
+          "summary": {
+            "crossingCount": 1,
+            "matchedCount": 1,
+            "unknownCount": 0
+          },
+          "crossingReasons": {
+            "TMAP 횡단 선형과 단일 시설 좌표를 연결했습니다.": 1
+          }
+        },
+        {
+          "id": "65c13463e6ff",
+          "options": [30],
+          "decision": "eligible",
+          "distanceM": 896.0,
+          "crossingCoverage": "classified_segments",
+          "summary": {
+            "crossingCount": 1,
+            "matchedCount": 1,
+            "unknownCount": 0
+          },
+          "crossingReasons": {
+            "TMAP 횡단 선형과 단일 시설 좌표를 연결했습니다.": 1
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "start": "성동구청",
+      "end": "서울숲역",
+      "status": "no_eligible_route",
+      "candidates": [
+        {
+          "id": "22c178d5b6e1",
+          "options": [0, 4, 30],
+          "decision": "unverified",
+          "distanceM": 2578.0,
+          "crossingCoverage": "classified_segments",
+          "summary": {
+            "crossingCount": 10,
+            "matchedCount": 0,
+            "unknownCount": 10
+          },
+          "crossingReasons": {
+            "횡단 시설 기록을 연결하지 못했습니다.": 10
+          }
+        },
+        {
+          "id": "0d815769b24f",
+          "options": [10],
+          "decision": "unverified",
+          "distanceM": 2555.0,
+          "crossingCoverage": "classified_segments",
+          "summary": {
+            "crossingCount": 11,
+            "matchedCount": 0,
+            "unknownCount": 11
+          },
+          "crossingReasons": {
+            "횡단 시설 기록을 연결하지 못했습니다.": 11
+          }
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

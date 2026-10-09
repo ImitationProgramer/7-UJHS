@@ -7,7 +7,7 @@ test('synthetic device → real FastAPI → browser values, GPS denial, timeout 
 }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/diagnostics');
   await expect(page.getByText('연결됨', { exact: true })).toBeVisible();
   await expect(page.getByText('DISCONNECTED', { exact: true })).toBeVisible();
   await expect(page.getByTestId('accelerometer-x')).toHaveText('—');
@@ -86,7 +86,7 @@ test('synthetic device → real FastAPI → browser values, GPS denial, timeout 
 test('keyboard validation, narrow layout, reduced motion and backend recovery', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/diagnostics');
   const input = page.getByLabel('Backend 주소');
   await input.fill('not-a-url');
   await input.press('Enter');
@@ -146,7 +146,7 @@ test('silent server heartbeat expires and dashboard reconnects automatically', a
     );
     // Deliberately no more heartbeats; a frozen transport is not a live device.
   });
-  await page.goto('/');
+  await page.goto('/diagnostics');
   await expect(page.getByText('CONNECTED', { exact: true })).toBeVisible();
   await expect(page.getByText('DISCONNECTED', { exact: true })).toBeVisible({
     timeout: 6000,

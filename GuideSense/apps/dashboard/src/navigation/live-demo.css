@@ -1,0 +1,127 @@
+.navigation .live-companion-heading {
+  align-items: flex-start;
+}
+.navigation .live-companion-heading > div {
+  display: grid;
+  gap: 7px;
+}
+.navigation .live-companion-heading strong {
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -0.6px;
+}
+.navigation .live-source-label {
+  color: var(--primary);
+  font:
+    600 10px/1.4 ui-monospace,
+    monospace;
+  letter-spacing: 1.5px;
+}
+.navigation .live-companion-heading > span {
+  padding: 5px 8px;
+  background: var(--background);
+  border-radius: 5px;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.navigation .live-companion-heading.is-connected > span {
+  background: #e7f4ed;
+  color: #176343;
+}
+.live-signal-path {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px 0 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.live-signal-path .active {
+  color: #176343;
+  font-weight: 600;
+}
+.navigation .live-companion-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px;
+  background: var(--background);
+  border-radius: 8px;
+}
+.navigation .live-companion-meta > div {
+  min-width: 0;
+}
+.navigation .live-companion-meta dt {
+  font-size: 10px;
+}
+.navigation .live-companion-meta dd {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.navigation .live-companion-meta [data-testid='live-device-id'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.navigation .live-companion .graph {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+.navigation .live-companion .graph-label {
+  align-items: baseline;
+  font-size: 12px;
+}
+.navigation .live-companion .graph-label > span:last-child {
+  font-size: 24px;
+  letter-spacing: -0.7px;
+  font-weight: 600;
+}
+.navigation .live-companion .graph svg {
+  max-height: 120px;
+}
+.navigation .live-companion .graph h2 {
+  font-size: 12px;
+}
+.navigation .live-companion .graph h2 .subtitle {
+  display: none;
+}
+.navigation .live-companion .trace {
+  stroke-width: 1.4;
+}
+.live-analysis-boundary {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.navigation .live-analysis-boundary strong {
+  display: block;
+  font-size: 12px;
+}
+.navigation .live-analysis-boundary p {
+  font-size: 13px;
+  margin: 6px 0;
+}
+.navigation .live-analysis-boundary span {
+  display: block;
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.voice-demo-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  font:
+    600 10px/1.4 ui-monospace,
+    monospace;
+  letter-spacing: 1px;
+  color: var(--primary);
+}
+.voice-demo-caption > span:last-child {
+  letter-spacing: 0;
+  font-family: inherit;
+}
